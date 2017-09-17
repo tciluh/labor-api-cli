@@ -15,17 +15,17 @@ protocol:
             results: 
                 - Step 3 Result A: 3
                 - Step 3 Result B: 4
-       - Step 4A Description:
-           imagePath: 04a.vsd
-           results:
-               - Step 4A completed: 5
-       - Step 4B Description:
-           imagePath: 04b.vsd
-           results:
-               - Step 4B completed: 5
-       - Step 5 Description:
-           imagePath: 05.vsd
-           results:
-               - experiment finished: null # null marks no next step
+        - Step 4A Description:
+            imagePath: 04a.vsd
+            results:
+                - Step 4A completed: 5
+        - Step 4B Description:
+            imagePath: 04b.vsd
+            results:
+                - Step 4B completed: 5
+        - Step 5 Description:
+            imagePath: 05.vsd
+            results:
+                - experiment finished: null # null marks no next step
 
         
