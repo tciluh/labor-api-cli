@@ -4,9 +4,15 @@
   "description": "CLI Tool for Labor API",
   "main": "main.js",
   "scripts": {
-        "start" : "nodemon main.js",
-        "run": "nodemon main.js"
+    "start": "nodemon main.js",
+    "run": "nodemon main.js"
   },
   "author": "Malte Bargholz",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "js-yaml": "^3.10.0"
+  }
 }
