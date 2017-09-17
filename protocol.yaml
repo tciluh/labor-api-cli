@@ -5,27 +5,42 @@ protocol:
         - Step 1 Description:
             imagePath: 01.vsd
             results:
-                - Step 1 completed: 1 # the number is the next step
+                - Step 1 completed: 
+                    imagePath: R01.vsd
+                    nextStep: 1
         - Step 2 Description:
             imagePath: 02.vsd
             results:
-                - Step 2 completed: 2
+                - Step 2 completed:
+                    imagePath: R02.vsd
+                    nextStep: 2
         - Step 3 Description:
             imagePath: 03.vsd
             results: 
-                - Step 3 Result A: 3
-                - Step 3 Result B: 4
+                - Step 3 Result A: 
+                    imagePath: R03a.vsd
+                    nextStep: 3
+                - Step 3 Result B:
+                    imagePath: R03a.vsd
+                    nextStep: 4
         - Step 4A Description:
             imagePath: 04a.vsd
             results:
-                - Step 4A completed: 5
+                - Step 4A completed:
+                    imagePath: R04a.vsd
+                    nextStep: 5
         - Step 4B Description:
             imagePath: 04b.vsd
             results:
-                - Step 4B completed: 5
+                - Step 4B completed:
+                    imagePath: R04b.vsd
+                    nextStep: 5
         - Step 5 Description:
             imagePath: 05.vsd
             results:
-                - experiment finished: null # null marks no next step
+                - experiment finished:
+                    imagePath: null
+                    nextStep: null
+
 
         
