@@ -7,40 +7,40 @@ protocol:
             results:
                 - Step 1 completed: 
                     imagePath: R01.vsd
-                    nextStep: 1
+                    nextInstruction: 1
         - Step 2 Description:
             imagePath: 02.vsd
             results:
                 - Step 2 completed:
                     imagePath: R02.vsd
-                    nextStep: 2
+                    nextInstruction: 2
         - Step 3 Description:
             imagePath: 03.vsd
             results: 
                 - Step 3 Result A: 
                     imagePath: R03a.vsd
-                    nextStep: 3
+                    nextInstruction: 3
                 - Step 3 Result B:
                     imagePath: R03a.vsd
-                    nextStep: 4
+                    nextInstruction: 4
         - Step 4A Description:
             imagePath: 04a.vsd
             results:
                 - Step 4A completed:
                     imagePath: R04a.vsd
-                    nextStep: 5
+                    nextInstruction: 5
         - Step 4B Description:
             imagePath: 04b.vsd
             results:
                 - Step 4B completed:
                     imagePath: R04b.vsd
-                    nextStep: 5
+                    nextInstruction: 5
         - Step 5 Description:
             imagePath: 05.vsd
             results:
                 - experiment finished:
                     imagePath: null
-                    nextStep: null
+                    nextInstruction: null
 
 
         
