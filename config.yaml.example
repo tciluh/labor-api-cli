@@ -1,4 +1,4 @@
-config:
-    apiURL: 'http://localhost:3000'
-    apiImageEndpoint: 'image/'
-    apiProtocolEndpoint: 'protocol/'
+apiURL: 'http://localhost:3000'
+apiImageEndpoint: 'image/'
+apiProtocolEndpoint: 'protocol/'
+imageBasePath: 'images/'
