@@ -26,8 +26,4 @@ const argv = yargs
     .demandCommand()
     .argv;
 
-//log the config to the user
-console.log("config: ");
-console.log(JSON.stringify(argv, null, '\t'));
-
 
