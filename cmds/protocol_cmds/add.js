@@ -10,7 +10,7 @@ module.exports.commands = 'add <files..>'
 module.exports.description = "add one or more protocols defined via yaml files"
 //provide a builder function which
 //sets the usage since is not done automatically for some reason
-module.exports.builder = (yargs) => yargs.usage("Add one or more protocols defined via yaml files:\n\n$0 protocol add [files..]");
+module.exports.builder = (yargs) => yargs.usage("Add one or more protocols defined via yaml files:\n\nUsage: $0 protocol add [files..]");
 //provide a handler function which is called when this subcommand gets executed
 module.exports.handler = (argv) => {
     //the files are now in argv.files

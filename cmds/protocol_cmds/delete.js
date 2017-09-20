@@ -8,7 +8,7 @@ module.exports.commands = 'delete <id>'
 module.exports.description = "delete a protocol with the given id"
 //provide a builder function which
 //sets the usage since is not done automatically for some reason
-module.exports.builder = (yargs) => yargs.usage("Delete a protocol with the given id:\n\n$0 protocol delete <id>");
+module.exports.builder = (yargs) => yargs.usage("Delete a protocol with the given id:\n\nUsage: $0 protocol delete <id>");
 //provide a handler function which is called when this subcommand gets executed
 module.exports.handler = (argv) => {
     //id is in argv.id
