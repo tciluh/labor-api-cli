@@ -3,40 +3,40 @@ protocol:
     description: This is a test protocol
     instructions:
         - Step 1 Description:
-            imagePath: 01.vsd
+            imagePath: 1.vsd
             results:
                 - Step 1 completed: 
-                    imagePath: R01.vsd
+                    imagePath: null 
                     nextInstruction: 1
         - Step 2 Description:
-            imagePath: 02.vsd
+            imagePath: 2.vsd
             results:
                 - Step 2 completed:
-                    imagePath: R02.vsd
+                    imagePath: null 
                     nextInstruction: 2
         - Step 3 Description:
-            imagePath: 03.vsd
+            imagePath: 3.vsd
             results: 
                 - Step 3 Result A: 
-                    imagePath: R03a.vsd
+                    imagePath: 4.vsd
                     nextInstruction: 3
                 - Step 3 Result B:
-                    imagePath: R03a.vsd
+                    imagePath: 4.vsd
                     nextInstruction: 4
         - Step 4A Description:
-            imagePath: 04a.vsd
+            imagePath: 5a.vsd
             results:
                 - Step 4A completed:
-                    imagePath: R04a.vsd
+                    imagePath: null 
                     nextInstruction: 5
         - Step 4B Description:
-            imagePath: 04b.vsd
+            imagePath: 5b.vsd
             results:
                 - Step 4B completed:
-                    imagePath: R04b.vsd
+                    imagePath: null 
                     nextInstruction: 5
         - Step 5 Description:
-            imagePath: 05.vsd
+            imagePath: 6a.vsd
             results:
                 - experiment finished:
                     imagePath: null
