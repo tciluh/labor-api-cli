@@ -19,7 +19,7 @@ const argv = yargs
     .version()
     .help('help').alias('help','h')
     .defaults(defaultConfig)
-    .config('config', 'Path to custom config.yaml', (path) => {
+    .config('config', 'Path to custom config.yml', (path) => {
         return yaml.safeLoad(fs.readFileSync(path, 'utf-8'));
     })
     .commandDir('cmds')
