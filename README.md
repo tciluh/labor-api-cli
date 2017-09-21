@@ -10,6 +10,7 @@ A command line tool for interacting with `labor-api` project.
 - start the main.js: `npm start` or `node main.js`
 
 ##Usage
+
 ### add a protocol
 `labcli protocol add <protocol yaml files>`
 ### delete a protocol
