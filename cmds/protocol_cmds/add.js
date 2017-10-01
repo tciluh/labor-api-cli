@@ -62,7 +62,6 @@ function readFiles(files){
     }
     return parsedFiles;
 }
-
 /** The main Upload function.
  * @param protocols An array of JSON representations of the protocol files to upload
  * @returns The API response if successful otherwise this throws an Error
@@ -96,6 +95,34 @@ async function uploadProtocols(protocols, argv){
                 newResults.push(newResult);
             }
             newInstruction.results = newResults;
+            //deal with actions
+            if(newInstruction.actions){
+                let newActions = [];
+                for(let srcAction of newInstruction.actions){
+                    //same situation as with the results
+                    //except the flattened key is identifier instead of description
+                    //flatten
+                    const flat = flattenYamlKeyValue(srcAction, 'identifier');
+                    //the tricky part is now that the server expects an action of the following format
+                    //{
+                    //    identifier: 'photometer',
+                    //    action: 'measure',
+                    //    arguments: {
+                    //        someKey: 420
+                    //    }
+                    //}
+                    //we solve this with the help of some fine deconstructuring magic
+                    let { identifier, action, ...args } = flat;
+                    newActions.push({
+                        identifier: identifier,
+                        action: action,
+                        arguments: args
+                    });
+                }
+                //update on newInstruction obj
+                newInstruction.actions = newActions;
+            }
+            //add this instruction to the list of finished ones
             newInstructions.push(newInstruction);
         }
         protocol.instructions = newInstructions;
@@ -147,16 +174,18 @@ async function uploadImage(object, argv){
 
 /** flatten a yaml key value to a single object with the key as a property
  * "name": {                   {
- *      imagePath: "..", ==>        name: "...",
+ *      imagePath: "..", ==>        nameKey: "name",
  *      results: [..]               imagePath: "..",
  * }                                results: [..]
  *                              }
  */
-function flattenYamlKeyValue(source){
+function flattenYamlKeyValue(source, nameKey = "description"){
     const keys = Object.keys(source);
     if(keys.length > 1 || keys.length < 1) throw new Error("malformed key value: " + source)
     const description = keys[0];
     const metadata = source[description];
     //this flattens the metadata object into the new object
-    return { description: description, ...metadata };
+    let flattend = {};
+    flattend[nameKey] = description;
+    return { ...flattend , ...metadata };
 }
