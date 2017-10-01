@@ -129,13 +129,15 @@ async function uploadProtocols(protocols, argv){
     }
     //second POST the protocol json to the protocol api
     //post the request
+    let responses = [];
     for(let protocol of protocols){
         //axios
         let res = await axios.post(argv.apiURL + argv.apiProtocolEndpoint, protocol);
-        if(res.status == 200 && res.data){
-            console.log(JSON.stringify(res.data, null, ' '));
+        if(res.status == 200 && res.data.success){
+            responses.push(res.data.payload);
         }
     }
+    return responses;
 }
 //helper functions
 /** Upload an image to the api/image/ endpoint specified by the imagePath key inside object.
@@ -161,15 +163,15 @@ async function uploadImage(object, argv){
     let res = await axios.post(argv.apiURL + argv.apiImageEndpoint, form, {
         headers: form.getHeaders()
     });
-    if(res.status == 200 && res.data && res.data.id){
+    if(res.status == 200 && res.data.success && res.data.payload.id){
         //the image was sucessfully uploaded
         //set the imageId
-        object.imageId = res.data.id;
+        object.imageId = res.data.payload.id;
         //delete the imagePath key
         delete object.imagePath;
         return object;
     }
-    else throw new Error("recieved strange response from image api:\n" + JSON.stringify(res, null, '  '));
+    else throw new Error("recieved strange response from image api:\n" + JSON.stringify(res.data, null, '  '));
 }
 
 /** flatten a yaml key value to a single object with the key as a property
