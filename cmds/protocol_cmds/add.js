@@ -3,11 +3,12 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
+const yaml = require('js-yaml');
 
 //protocol add subcommand for la-cli
-module.exports.commands = 'add <files..>'
+module.exports.command = 'add <files..>'
 //provide a description
-module.exports.description = "add one or more protocols defined via yaml files"
+module.exports.describe = "Add one or more protocols defined via yaml files"
 //provide a builder function which
 //sets the usage since is not done automatically for some reason
 module.exports.builder = (yargs) => yargs.usage("Add one or more protocols defined via yaml files:\n\nUsage: $0 protocol add [files..]");
@@ -17,7 +18,7 @@ module.exports.handler = (argv) => {
     //read them from the disk
     const files = readFiles(argv.files);
     //try sending them to the API
-    uploadProtocols
+    uploadProtocols(files, argv)
         .then((protocols) => {
             console.log("succesfully inserted protocols")
             console.info("API Response: ");
@@ -26,7 +27,7 @@ module.exports.handler = (argv) => {
         .catch((error) => {
             console.error("error uploading protocols to API!");
             console.error(error);
-        
+
         })
 }
 
@@ -38,8 +39,9 @@ function readFiles(files){
     let parsedFiles = [];
     for(let file of files)  {
         //first read from disk
+        let input;
         try{
-            const input = fs.readFileSync(file);
+            input = fs.readFileSync(file);
         }
         catch(error){
             console.error("error reading file: " + file);
@@ -49,14 +51,14 @@ function readFiles(files){
         //then parse
         try{
             const parsed = yaml.safeLoad(input);
+            //only if reading and parsing was succesful add to parsed files
+            parsedFiles.push(parsed);
         }
         catch(error){
             console.error("error parsing file: " + file);
             console.error(error);
             continue;
         }
-        //only if reading and parsing was succesful add to parsed files
-        parsedFiles.push(parsed);
     }
     return parsedFiles;
 }
@@ -65,7 +67,7 @@ function readFiles(files){
  * @param protocols An array of JSON representations of the protocol files to upload
  * @returns The API response if successful otherwise this throws an Error
  */
-async function uploadProtocols(protocols){
+async function uploadProtocols(protocols, argv){
     //insert the protocols via the api
     //first insert the images
     for(let i = 0; i < protocols.length; ++i){
@@ -77,7 +79,7 @@ async function uploadProtocols(protocols){
             //therefore flatten it
             let newInstruction = flattenYamlKeyValue(instruction)
             //upload the image of this instruction
-            newInstruction = await uploadImage(newInstruction);
+            newInstruction = await uploadImage(newInstruction, argv);
             //deal with the results
             let newResults = [];
             for(let result of newInstruction.results){
@@ -85,7 +87,7 @@ async function uploadProtocols(protocols){
                 //flatten the source object
                 let newResult = flattenYamlKeyValue(result);
                 //upload the image of this result
-                newResult = await uploadImage(newResult);
+                newResult = await uploadImage(newResult, argv);
                 //rename the nextInstruction key to targetInstructionId which is the expected key in the database
                 newResult.targetInstructionId = newResult.nextInstruction;
                 //delete the old key
@@ -112,7 +114,7 @@ async function uploadProtocols(protocols){
 /** Upload an image to the api/image/ endpoint specified by the imagePath key inside object.
  *  @returns the modified object.
  **/
-async function uploadImage(object){
+async function uploadImage(object, argv){
     //check if the object is there and the required key imagePath is not null
     if(!object) throw new Error("cant upload image for null object");
     if(!object.imagePath){

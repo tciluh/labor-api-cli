@@ -1,46 +1,45 @@
-protocol:
-    name: Test Protocol
-    description: This is a test protocol
-    instructions:
-        - Step 1 Description:
-            imagePath: 1.vsd
-            results:
-                - Step 1 completed: 
-                    imagePath: null 
-                    nextInstruction: 1
-        - Step 2 Description:
-            imagePath: 2.vsd
-            results:
-                - Step 2 completed:
-                    imagePath: null 
-                    nextInstruction: 2
-        - Step 3 Description:
-            imagePath: 3.vsd
-            results: 
-                - Step 3 Result A: 
-                    imagePath: 4.vsd
-                    nextInstruction: 3
-                - Step 3 Result B:
-                    imagePath: 4.vsd
-                    nextInstruction: 4
-        - Step 4A Description:
-            imagePath: 5a.vsd
-            results:
-                - Step 4A completed:
-                    imagePath: null 
-                    nextInstruction: 5
-        - Step 4B Description:
-            imagePath: 5b.vsd
-            results:
-                - Step 4B completed:
-                    imagePath: null 
-                    nextInstruction: 5
-        - Step 5 Description:
-            imagePath: 6a.vsd
-            results:
-                - experiment finished:
-                    imagePath: null
-                    nextInstruction: null
+name: Test Protocol
+description: This is a test protocol
+instructions:
+    - Step 1 Description:
+        imagePath: 1.vsd
+        results:
+            - Step 1 completed: 
+                imagePath: null 
+                nextInstruction: 1
+    - Step 2 Description:
+        imagePath: 2.vsd
+        results:
+            - Step 2 completed:
+                imagePath: null 
+                nextInstruction: 2
+    - Step 3 Description:
+        imagePath: 3.vsd
+        results: 
+            - Step 3 Result A: 
+                imagePath: 4.vsd
+                nextInstruction: 3
+            - Step 3 Result B:
+                imagePath: 4.vsd
+                nextInstruction: 4
+    - Step 4A Description:
+        imagePath: 5a.vsd
+        results:
+            - Step 4A completed:
+                imagePath: null 
+                nextInstruction: 5
+    - Step 4B Description:
+        imagePath: 5b.vsd
+        results:
+            - Step 4B completed:
+                imagePath: null 
+                nextInstruction: 5
+    - Step 5 Description:
+        imagePath: 6a.vsd
+        results:
+            - experiment finished:
+                imagePath: null
+                nextInstruction: null
 
 
-        
+    

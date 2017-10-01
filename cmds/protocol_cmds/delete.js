@@ -3,9 +3,9 @@
 const axios = require('axios');
 //
 //protocol add subcommand for la-cli
-module.exports.commands = 'delete <id>'
+module.exports.command = 'delete <id>'
 //provide a description
-module.exports.description = "delete a protocol with the given id"
+module.exports.describe = "delete a protocol with the given id"
 //provide a builder function which
 //sets the usage since is not done automatically for some reason
 module.exports.builder = (yargs) => yargs.usage("Delete a protocol with the given id:\n\nUsage: $0 protocol delete <id>");
