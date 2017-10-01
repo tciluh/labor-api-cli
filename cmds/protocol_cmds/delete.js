@@ -12,7 +12,7 @@ module.exports.builder = (yargs) => yargs.usage("Delete a protocol with the give
 //provide a handler function which is called when this subcommand gets executed
 module.exports.handler = (argv) => {
     //id is in argv.id
-    deleteProtocol(argv.id)
+    deleteProtocol(argv.id, argv)
         .then(() => console.log(`protocol with ID: ${argv.id} succesfully deleted`))
         .catch((error) => console.error(`error deleting protocol:\n ${error}`));
 }
@@ -20,7 +20,7 @@ module.exports.handler = (argv) => {
 /** Deletes a protocol with the given id
  * @param id The protocol id to delete
  */
-async function deleteProtocol(id){
+async function deleteProtocol(id, argv){
     let res = axios.delete(argv.apiURL + argv.apiProtocolEndpoint, {
         params: { id: id }
     });
