@@ -8,8 +8,10 @@ instructions:
                 action: measure
                 wavelength: 420
                 current: 1
+                equationIdentifier: a
             - switch: 
                 action: scaleon
+                equationIdentifier: b
         results:
             - Step 1 completed: 
                 imagePath: null 
@@ -44,6 +46,7 @@ instructions:
                 nextInstruction: 5
     - Step 5 Description:
         imagePath: 6a.vsd
+        equation: "a + b * 2"
         results:
             - experiment finished:
                 imagePath: null

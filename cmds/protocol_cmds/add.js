@@ -112,10 +112,11 @@ async function uploadProtocols(protocols, argv){
                     //    }
                     //}
                     //we solve this with the help of some fine deconstructuring magic
-                    let { identifier, action, ...args } = flat;
+                    let { identifier, action, equationIdentifier, ...args } = flat;
                     newActions.push({
                         identifier: identifier,
                         action: action,
+                        equationIdentifier: equationIdentifier,
                         arguments: args
                     });
                 }
