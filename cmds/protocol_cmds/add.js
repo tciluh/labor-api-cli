@@ -72,21 +72,23 @@ async function uploadProtocols(protocols, argv){
     for(let i = 0; i < protocols.length; ++i){
         let protocol = protocols[i];
         let newInstructions = [];
-        for(let instruction of protocol.instructions){
+        for(let k = 0; k < protocol.instructions.length; k++){
+            let instruction = protocol.instructions[k];
             //instruction is an object with one key value pair
             //where key => description //value => metadata (imagePath, results)
             //therefore flatten it
             let newInstruction = flattenYamlKeyValue(instruction)
             //upload the image of this instruction
-            newInstruction = await uploadImage(newInstruction, argv);
+            newInstruction = await uploadImage(newInstruction, argv, k);
             //deal with the results
             let newResults = [];
-            for(let result of newInstruction.results){
+            for(let l = 0; l < newInstruction.results.length; l++){
+                const result = newInstruction.results[l];
                 //same situation as with the results
                 //flatten the source object
                 let newResult = flattenYamlKeyValue(result);
                 //upload the image of this result
-                newResult = await uploadImage(newResult, argv);
+                newResult = await uploadImage(newResult, argv, k, l);
                 //rename the nextInstruction key to targetInstructionId which is the expected key in the database
                 newResult.targetInstructionId = newResult.nextInstruction;
                 //delete the old key
@@ -144,18 +146,38 @@ async function uploadProtocols(protocols, argv){
 /** Upload an image to the api/image/ endpoint specified by the imagePath key inside object.
  *  @returns the modified object.
  **/
-async function uploadImage(object, argv){
+async function uploadImage(object, argv, instruction_index = null, result_index = null){
     //check if the object is there and the required key imagePath is not null
     if(!object) throw new Error("cant upload image for null object");
+    let imagePath;
     if(!object.imagePath){
-        console.warn(`image path for object: ${object} is not defined. skipping this image`);
-        //we still need to set the imageId and delete the imagePath key
-        object.imageId = null;
-        delete object.imagePath;
-        return object;
+        //try to guess the file name if none was given.
+        //the filename should have a structure like this <instruction index>r<result index>.png
+        let path = "" + instruction_index;
+        if(result_index != null) {
+            path += "r" + result_index; 
+        }
+        //add extension
+        //XXX: this should really be configurable.
+        path += ".png";
+        //check if the file exists
+        //checkExistsSync is not deprecated and should be used here.
+        if(fs.existsSync(argv.imageBasePath + path)){
+            imagePath = path
+        }
+        else{
+            console.warn(`image path for object: ${object} is not defined and couldnt be guessed. path: ${path} does not exist. skipping this image`);
+            //we still need to set the imageId and delete the imagePath key
+            object.imageId = null;
+            delete object.imagePath;
+            return object;
+        }
+    }
+    else{
+        imagePath = object.imagePath;
     }
     //create read stream for image
-    let imageStream = fs.createReadStream(argv.imageBasePath + object.imagePath);
+    let imageStream = fs.createReadStream(argv.imageBasePath + imagePath);
     //create form data object
     const form = new FormData();
     //set the image field
