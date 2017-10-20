@@ -1,55 +1,38 @@
 name: Test Protocol
 description: This is a test protocol
 instructions:
-    - Step 1 Description:
-        imagePath: 1.vsd
+    - Add the description of step one here:
         actions:
-            - photometer: 
-                action: measure
-                wavelength: 420
-                current: 1
-                equationIdentifier: a
-            - switch: 
-                action: scaleon
-                equationIdentifier: b
+            - photometer:  # the name of the corresponding plugin in labor-api (required)
+                action: measure #each plugin supports certain actions (required)
+                equationIdentifier: a #each action can define a optional identifier with which it can be referenced in an equation instruction
+                wavelength: 420 # this will be passed to the plugin as well as anything which is defined here
+                current: 1 # use this to pass arguments to the plugin
         results:
-            - Step 1 completed: 
-                imagePath: null 
-                nextInstruction: 1
-    - Step 2 Description:
-        imagePath: 2.vsd
+            - add a description for a result here: #for singular result (i.e. instructions that directly to another instruction) these will probably not be displayed by the client
+                nextInstruction: 1 #the index of the next instruction. indizes start at zero, so this would be instruction 0.
+    - Add a description for the second step here:
         results:
-            - Step 2 completed:
-                imagePath: null 
+            - Wow we did something:
                 nextInstruction: 2
-    - Step 3 Description:
-        imagePath: 3.vsd
-               
-        results: 
-            - Step 3 Result A: 
-                imagePath: 4.vsd
-                nextInstruction: 3
-            - Step 3 Result B:
-                imagePath: 4.vsd
+    - Add a description for the third step here:
+        results:  # steps can have multiple results like this
+            - Something turned green:  #use the result description to describe the criteria which should lead to the selection of this step by the user
+                nextInstruction: 3 # each result will have a different next instruction. this one references the instruction at index 3 (aka the fourth instruction defined)
+            - Something turned yellow: # the user will be presented with both result descriptions. he will then have to choose one, so make sure these are unique
                 nextInstruction: 4
-    - Step 4A Description:
-        imagePath: 5a.vsd
+    - Add a description for variant a of step 4:
         results:
-            - Step 4A completed:
-                imagePath: null 
-                nextInstruction: 5
-    - Step 4B Description:
-        imagePath: 5b.vsd
+            - Something happened here:
+                nextInstruction: 5 # multiple instruction can have the same target instructions. this makes it easy to have a user perform additional steps before continuing with the normal protocol.
+    - add a description for variant b of step 4:
         results:
-            - Step 4B completed:
-                imagePath: null 
-                nextInstruction: 5
-    - Step 5 Description:
-        imagePath: 6a.vsd
-        equation: "a + b * 2"
+            - Something else happened here:
+                nextInstruction: 5 # multiple instruction can have the same target instructions. this makes it easy to have a user perform additional steps before continuing with the normal protocol.
+    - add a description for the final step here: #instructions which have a result without a nextInstruction will be considered a final instruction by the client
+        equation: "a + b * 2" # sometimes you'd probably like to display a calculated value at the end of a protocol. use recorded measurements here via their equation identifier.
         results:
             - experiment finished:
-                imagePath: null
                 nextInstruction: null
 
 
