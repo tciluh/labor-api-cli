@@ -158,8 +158,7 @@ async function uploadImage(object, argv, instruction_index = null, result_index 
             path += "r" + result_index; 
         }
         //add extension
-        //XXX: this should really be configurable.
-        path += ".png";
+        path += "." + argv.defaultImageExtension
         //check if the file exists
         //checkExistsSync is not deprecated and should be used here.
         if(fs.existsSync(argv.imageBasePath + path)){
