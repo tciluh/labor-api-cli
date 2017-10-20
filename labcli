@@ -10,7 +10,8 @@ const defaultConfig = {
     apiURL: 'http://localhost:3000/',
     apiImageEndpoint:'image/',
     apiProtocolEndpoint: 'protocol/',
-    imageBasePath: 'images/'
+    imageBasePath: 'images/',
+    defaultImageExtension: 'png',
 }
 
 //define the commandline arguments with the yargs library
