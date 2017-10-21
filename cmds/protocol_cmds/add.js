@@ -78,6 +78,9 @@ async function uploadProtocols(protocols, argv){
             //where key => description //value => metadata (imagePath, results)
             //therefore flatten it
             let newInstruction = flattenYamlKeyValue(instruction)
+            if(newInstruction.equation != null && newInstruction.timerDuration != null){
+                throw new Error("an instruction can't have both an equation and a timerDuration.");
+            }
             //upload the image of this instruction
             newInstruction = await uploadImage(newInstruction, argv, k);
             //deal with the results

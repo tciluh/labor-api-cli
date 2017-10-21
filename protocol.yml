@@ -1,6 +1,6 @@
 name: Test Protocol
 description: This is a test protocol
-instructions:
+instructions: #we will refer to instruction as steps and vice versa for the length of the example
     - Add the description of step one here:
         actions:
             - photometer:  # the name of the corresponding plugin in labor-api (required)
@@ -10,8 +10,10 @@ instructions:
                 current: 1 # use this to pass arguments to the plugin
         results:
             - add a description for a result here: #for singular result (i.e. instructions that directly to another instruction) these will probably not be displayed by the client
-                nextInstruction: 1 #the index of the next instruction. indizes start at zero, so this would be instruction 0.
+                nextInstruction: 1 #the index of the next instruction. indizes start at zero, so this step would be instruction 0.
     - Add a description for the second step here:
+        timerDuration: 60 # this step will show the user a timer which runs for 60 seconds
+        # equation: "a*b*c" # note that a step can either contain a equation or a timer duration otherwise protocol insertion will fail
         results:
             - Wow we did something:
                 nextInstruction: 2
