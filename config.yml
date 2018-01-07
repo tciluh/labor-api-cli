@@ -1,0 +1,5 @@
+apiURL: 'http://130.75.115.47:3000/'
+apiImageEndpoint: 'image/'
+apiProtocolEndpoint: 'protocol/'
+imageBasePath: 'images/'
+defaultImageExtension: 'png'

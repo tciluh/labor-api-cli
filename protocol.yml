@@ -1,7 +1,7 @@
-name: Test Protocol
-description: This is a test protocol
+name: Fancy Test Protocol
+description: This is a test protocol with pictures :)
 instructions: #we will refer to instruction as steps and vice versa for the length of the example
-    - Add the description of step one here:
+    - Always wear gloves!:
         actions:
             - photometer:  # the name of the corresponding plugin in labor-api (required)
                 action: measure #each plugin supports certain actions (required)
@@ -11,28 +11,32 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
         results:
             - add a description for a result here: #for singular result (i.e. instructions that directly to another instruction) these will probably not be displayed by the client
                 nextInstruction: 1 #the index of the next instruction. indizes start at zero, so this step would be instruction 0.
-    - Add a description for the second step here:
-        timerDuration: 60 # this step will show the user a timer which runs for 60 seconds
-        # equation: "a*b*c" # note that a step can either contain a equation or a timer duration otherwise protocol insertion will fail
+    - Put something in:
         results:
             - Wow we did something:
                 nextInstruction: 2
-    - Add a description for the third step here:
+    - Wait for 60 seconds:
+        timerDuration: 60 # this step will show the user a timer which runs for 60 seconds
+        # equation: "a*b*c" # note that a step can either contain a equation or a timer duration otherwise protocol insertion will fail
+        results:
+            - Wow something happened:
+                nextInstruction: 3
+    - Check for cloudiness of your sample:
         results:  # steps can have multiple results like this
-            - Something turned green:  #use the result description to describe the criteria which should lead to the selection of this step by the user
-                nextInstruction: 3 # each result will have a different next instruction. this one references the instruction at index 3 (aka the fourth instruction defined)
-            - Something turned yellow: # the user will be presented with both result descriptions. he will then have to choose one, so make sure these are unique
-                nextInstruction: 4
-    - Add a description for variant a of step 4:
+            - The sample is cloudy:  #use the result description to describe the criteria which should lead to the selection of this step by the user
+                nextInstruction: 4 # each result will have a different next instruction. this one references the instruction at index 3 (aka the fourth instruction defined)
+            - The sample is not cloudy: # the user will be presented with both result descriptions. he will then have to choose one, so make sure these are unique
+                nextInstruction: 5
+    - Add some silicone:
         results:
             - Something happened here:
-                nextInstruction: 5 # multiple instruction can have the same target instructions. this makes it easy to have a user perform additional steps before continuing with the normal protocol.
-    - add a description for variant b of step 4:
+                nextInstruction: 6 # multiple instruction can have the same target instructions. this makes it easy to have a user perform additional steps before continuing with the normal protocol.
+    - Add something not siliconey:
         results:
             - Something else happened here:
-                nextInstruction: 5 # multiple instruction can have the same target instructions. this makes it easy to have a user perform additional steps before continuing with the normal protocol.
-    - add a description for the final step here: #instructions which have a result without a nextInstruction will be considered a final instruction by the client
-        equation: "a + b * 2" # sometimes you'd probably like to display a calculated value at the end of a protocol. use recorded measurements here via their equation identifier.
+                nextInstruction: 6 # multiple instruction can have the same target instructions. this makes it easy to have a user perform additional steps before continuing with the normal protocol.
+    - Yeah you are done with this protocol. Enjoy this fancy equation x) : #instructions which have a result without a nextInstruction will be considered a final instruction by the client
+        equation: "\"Brightness\" = a + b * 2" # sometimes you'd probably like to display a calculated value at the end of a protocol. use recorded measurements here via their equation identifier.
         results:
             - experiment finished:
                 nextInstruction: null
