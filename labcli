@@ -27,4 +27,5 @@ const argv = yargs
     .demandCommand()
     .argv;
 
+global.config = argv;
 
