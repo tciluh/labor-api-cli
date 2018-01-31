@@ -4,6 +4,7 @@ const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
 const yaml = require('js-yaml');
+const path = require('path');
 
 //protocol add subcommand for la-cli
 module.exports.command = 'add <files..>'
@@ -18,7 +19,7 @@ module.exports.handler = (argv) => {
     //read them from the disk
     const files = readFiles(argv.files);
     //try sending them to the API
-    uploadProtocols(files, argv)
+    uploadProtocols(files)
         .then((protocols) => {
             console.log("succesfully inserted protocols")
             console.info("API Response: ");
@@ -62,141 +63,203 @@ function readFiles(files){
     }
     return parsedFiles;
 }
+
+
+
 /** The main Upload function.
  * @param protocols An array of JSON representations of the protocol files to upload
  * @returns The API response if successful otherwise this throws an Error
  */
-async function uploadProtocols(protocols, argv){
+async function uploadProtocols(protocols){
     //insert the protocols via the api
-    //first insert the images
-    for(let i = 0; i < protocols.length; ++i){
-        let protocol = protocols[i];
-        let newInstructions = [];
-        for(let k = 0; k < protocol.instructions.length; k++){
-            let instruction = protocol.instructions[k];
-            //instruction is an object with one key value pair
-            //where key => description //value => metadata (imagePath, results)
-            //therefore flatten it
-            let newInstruction = flattenYamlKeyValue(instruction)
-            if(newInstruction.equation != null && newInstruction.timerDuration != null){
-                throw new Error("an instruction can't have both an equation and a timerDuration.");
-            }
-            //upload the image of this instruction
-            newInstruction = await uploadImage(newInstruction, argv, k);
-            //deal with the results
-            let newResults = [];
-            for(let l = 0; l < newInstruction.results.length; l++){
-                const result = newInstruction.results[l];
-                //same situation as with the results
-                //flatten the source object
-                let newResult = flattenYamlKeyValue(result);
-                //upload the image of this result
-                newResult = await uploadImage(newResult, argv, k, l);
-                //rename the nextInstruction key to targetInstructionId which is the expected key in the database
-                newResult.targetInstructionId = newResult.nextInstruction;
-                //delete the old key
-                delete newResult.nextInstruction;
-                //add to new results array
-                newResults.push(newResult);
-            }
-            newInstruction.results = newResults;
-            //deal with actions
-            if(newInstruction.actions){
-                let newActions = [];
-                for(let srcAction of newInstruction.actions){
-                    //same situation as with the results
-                    //except the flattened key is identifier instead of description
-                    //flatten
-                    const flat = flattenYamlKeyValue(srcAction, 'identifier');
-                    //the tricky part is now that the server expects an action of the following format
-                    //{
-                    //    identifier: 'photometer',
-                    //    action: 'measure',
-                    //    arguments: {
-                    //        someKey: 420
-                    //    }
-                    //}
-                    //we solve this with the help of some fine deconstructuring magic
-                    let { identifier, action, equationIdentifier, ...args } = flat;
-                    newActions.push({
-                        identifier: identifier,
-                        action: action,
-                        equationIdentifier: equationIdentifier,
-                        arguments: args
-                    });
-                }
-                //update on newInstruction obj
-                newInstruction.actions = newActions;
-            }
-            //add this instruction to the list of finished ones
-            newInstructions.push(newInstruction);
+    //first convert yaml syntax to valid api syntax
+    const parsedProtocols = [];
+    for(const protocol of protocols) {
+        if(!protocol.name || !protocol.description) {
+            console.warn(`skipping protocol: \n ${JSON.stringify(protocol)}\n needs both a description and a name`);
+            continue;
         }
-        protocol.instructions = newInstructions;
+        let identifierToIndex = {};
+        try {
+            protocol.instructions = protocol.instructions.map(async (elem, index) => {
+                //a instruction is consisted of an instruction identifier
+                //as the key to a js object
+                //containing description, actions and results
+                const instruction = flattenYamlKeyValue(elem);
+                //save the index of this instruction identifier
+                identifierToIndex[instruction.identifier] = index;
+                //make sure its either a simple, equation or timer instruction
+                if(instruction.equation && instruction.timerDuration) {
+                    throw new Error(`instruction: ${JSON.stringify(instruction)}\n has both 'equation' and 'timerDuration' defined!`);
+                }
+                //upload the image
+                const ipath = guessImagePath(instruction);
+                instruction.imageId = await uploadImage(ipath);
+                //parse results but dont set target instruction ids yet.
+                //this will decode the description and upload any images
+                instruction.results = instruction.result.map(async (elem) => await parseResult(instruction, elem))
+                //parse any actions
+                instruction.actions = instruction.actions.map((elem) => {
+                    if(!elem.identifier || !elem.action){
+                        throw new Error(`error in instruction:\n${JSON.stringify(instruction)}\nat action: ${JSON.stringify(action)}`);
+                    }
+                    //get all important info out
+                    const { identifier, action, equationIdentifier, ...args } = elem;
+                    //and put all non standard keys into arguments
+                    return { identifier, action, equationIdentifier, arguments: args};
+                })
+                //return the finished instruction
+                return instruction;
+            });
+        }
+        catch(error) {
+            console.warn(`error while parsing instructions in protocol ${protocol.name}\n error:\n`, error);
+            continue;
+        }
+        //fix target instruction ids which correspond to index in the json array for protocol creation
+        try {
+            protocol.instructions = protocol.instructions.map((elem) => {
+                elem.results = elem.results.map((result) => {
+                    const id = result.nextInstruction;
+                    if(!id) {
+                        //only the last instruction will have a null nextInstruction 
+                        return { targetInstructionId: null, ...result};
+                    }
+                    const index = identifierToIndex[id];
+                    if(index) {
+                        return { targetInstructionId: index, ...result};
+                    }
+                    else{
+                        throw new Error(`couldnt find instruction with identifier: ${id}, 
+                            referenced in instruction: \n ${JSON.stringify(elem)}`);
+                    }
+                });
+            });
+        
+        }
+        catch(error) {
+            console.warn(`error while setting up target instruction ids in protocol ${protocol.name}\n error:\n`, error);
+            continue;
+        }
+        //save this protocol
+        parsedProtocols.push(protocol);
     }
     //second POST the protocol json to the protocol api
     //post the request
     let responses = [];
-    for(let protocol of protocols){
+    for(let protocol of parsedProtocols){
         //axios
-        let res = await axios.post(argv.apiURL + argv.apiProtocolEndpoint, protocol);
-        if(res.status == 200 && res.data.success){
-            responses.push(res.data.payload);
+        try {
+            let res = await axios.post(config.apiURL + config.apiProtocolEndpoint, protocol);
+            if(res.status == 200 && res.data.success){
+                responses.push(res.data.payload);
+            }
+            else throw new Error(`invalid status code ${res.status} or success flag not set from api`);
+        }
+        catch(error) {
+            console.warn(`error while POSTing the protocol to the Labor-API at ${config.apiUrl}${config.apiProtocolEndpoint}
+            \n protocol: `, protocol, '\n error:', error);
         }
     }
     return responses;
 }
-//helper functions
-/** Upload an image to the api/image/ endpoint specified by the imagePath key inside object.
- *  @returns the modified object.
- **/
-async function uploadImage(object, argv, instruction_index = null, result_index = null){
-    //check if the object is there and the required key imagePath is not null
-    if(!object) throw new Error("cant upload image for null object");
-    let imagePath;
-    if(!object.imagePath){
-        //try to guess the file name if none was given.
-        //the filename should have a structure like this <instruction index>r<result index>.png
-        let path = "" + instruction_index;
-        if(result_index != null) {
-            path += "r" + result_index; 
-        }
-        //add extension
-        path += "." + argv.defaultImageExtension
-        //check if the file exists
-        //checkExistsSync is not deprecated and should be used here.
-        if(fs.existsSync(argv.imageBasePath + path)){
-            imagePath = path
-        }
-        else{
-            console.warn(`image path for object: ${object} is not defined and couldnt be guessed. path: ${path} does not exist. skipping this image`);
-            //we still need to set the imageId and delete the imagePath key
-            object.imageId = null;
-            delete object.imagePath;
-            return object;
-        }
+
+/** Parses a API correct result object from the yaml syntax.
+ * Two Syntax styles are supported:
+ * - Short Syntax
+ *   ```javascript
+ *   {
+ *      'a result description': 'target instruction identifier'
+ *   }
+ *   ```
+ * - Long Syntax
+ *   ```javascript
+ *   {
+ *      description: 'a result description', //required
+ *      nextInstruction: 'an instruction identifier', //required
+ *      imagePath: '/path/to/image/' //optional
+ *   }
+ *  @param instruction The already parsed instruction to which this result belongs.
+ *  @param rawResult The parsed but not yet decoded yaml representation. If the given js object has more than 2 keys, it will be
+ *  treated as being in the long syntax.
+ *  @return a decoded and parsed result ready for the labor-api.
+ *  @throws Error If the result cannot be decoded.
+ */
+async function parseResult(instruction, rawResult) {
+    if(!rawResult) throw new Error('cant decode null raw result');
+    if(Object.keys(rawResult).length >= 2) {
+        //long syntax 
+        //no need to flatten
+        if(!rawResult.description) throw new Error(`cant decode result in long syntax without description, at instruction \n ${JSON.stringify(instruction)}\nresult: ${rawResult}}`);
+        let path = guessImagePath(instruction, rawResult);
+        rawResult.imageId = await uploadImage(path);
+        return rawResult;
     }
-    else{
-        imagePath = object.imagePath;
+    else if(Object.keys(rawResult).length == 1) {
+        //short syntax 
+        const result = flattenYamlKeyValue(rawResult, 'description');
+        let path = guessImagePath(instruction, result);
+        result.imageId = await uploadImage(path);
+        return result;
+    }
+    else {
+       //no keys at all -> malformed 
+       throw new Error('cant decode raw result without any keys');
+    }
+}
+
+/** Guesses an image path from the given instruction and result index
+ * If result index is null only a instruction image path will generated.
+ * If imagePath is set on either the instruction or the result this path will be returned instead of a generated path.
+ * An instruction image path is construction like this: `{instructionIdentifier}.{config.defaultImageExtension}`
+ * An result image path is constructed like this: `{instructionIdentifier}_result_{resultIndex}.{config.defaultImageExtension`
+ * @param The instruction to use 
+ * @param result The result for which to generate the imagePath, may be null. In that case only an instruction imagePath 
+ * will be generated
+ * @returns The guessed imagePath or null if something went wrong
+ */
+function guessImagePath(instruction, result = null) {
+    if(!instruction) return null;
+    if(instruction.imagePath && !result) return instruction.imagePath;
+    if(result && result.imagePath) return result.imagePath;
+
+    let ipath = `${instruction.identifier}`;
+    if(result) {
+        if(instruction.results && instruction.results.indexOf(result) >= 0)
+        ipath += `_result_${instruction.results.indexOf(result)}`;
+    }
+    ipath += `.${config.defaultImageExtension}`;
+    return ipath;
+}
+
+/** Upload an image to the api/image/ and return the id returned by api 
+ * @param ipath the path to image inside the folder defined by the imageBasePath config paramter
+ *  @returns The image id returned by the api or null if something failed
+ **/
+async function uploadImage(ipath){
+    let fullPath = path.join(config.imageBasePath, ipath);
+    if(!fs.existsSync(fullPath)) {
+        console.warn(`couldnt find image at path: ${fullPath}, does it exist?`);
+        return null;
     }
     //create read stream for image
-    let imageStream = fs.createReadStream(argv.imageBasePath + imagePath);
+    let imageStream = fs.createReadStream(fullPath);
     //create form data object
     const form = new FormData();
     //set the image field
     form.append('image', imageStream);
     //post the request
-    let res = await axios.post(argv.apiURL + argv.apiImageEndpoint, form, {
+    let res = await axios.post(config.apiURL + config.apiImageEndpoint, form, {
         headers: form.getHeaders()
     });
     if(res.status == 200 && res.data.success && res.data.payload.id){
         //the image was sucessfully uploaded
-        //set the imageId
-        object.imageId = res.data.payload.id;
-        //delete the imagePath key
-        delete object.imagePath;
-        return object;
+        return res.data.payload.id;
     }
-    else throw new Error("recieved strange response from image api:\n" + JSON.stringify(res.data, null, '  '));
+    else{
+        console.warn(`recieved strange response from image api:\n${JSON.stringify(res.data, null, '  ')} \n while trying to upload image at path: ${fullPath}`);
+        return null;
+    }
 }
 
 /** flatten a yaml key value to a single object with the key as a property
@@ -206,7 +269,7 @@ async function uploadImage(object, argv, instruction_index = null, result_index 
  * }                                results: [..]
  *                              }
  */
-function flattenYamlKeyValue(source, nameKey = "description"){
+function flattenYamlKeyValue(source, nameKey = "identifier"){
     const keys = Object.keys(source);
     if(keys.length > 1 || keys.length < 1) throw new Error("malformed key value: " + source)
     const description = keys[0];
