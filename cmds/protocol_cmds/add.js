@@ -14,7 +14,10 @@ module.exports.describe = "Add one or more protocols defined via yaml files"
 //sets the usage since is not done automatically for some reason
 module.exports.builder = (yargs) => yargs.usage("Add one or more protocols defined via yaml files:\n\nUsage: $0 protocol add [files..]");
 //provide a handler function which is called when this subcommand gets executed
+let config;
 module.exports.handler = (argv) => {
+    //set file global config
+    config = argv;
     //the files are now in argv.files
     //read them from the disk
     const files = readFiles(argv.files);
@@ -81,7 +84,7 @@ async function uploadProtocols(protocols){
         }
         let identifierToIndex = {};
         try {
-            protocol.instructions = protocol.instructions.map(async (elem, index) => {
+            protocol.instructions = await Promise.all(protocol.instructions.map(async (elem, index) => {
                 //a instruction is consisted of an instruction identifier
                 //as the key to a js object
                 //containing description, actions and results
@@ -97,24 +100,29 @@ async function uploadProtocols(protocols){
                 instruction.imageId = await uploadImage(ipath);
                 //parse results but dont set target instruction ids yet.
                 //this will decode the description and upload any images
-                instruction.results = instruction.result.map(async (elem) => await parseResult(instruction, elem))
+                instruction.results = await Promise.all(instruction.results.map(async (elem) => {
+                    return await parseResult(instruction, elem)
+                }));
                 //parse any actions
-                instruction.actions = instruction.actions.map((elem) => {
-                    if(!elem.identifier || !elem.action){
-                        throw new Error(`error in instruction:\n${JSON.stringify(instruction)}\nat action: ${JSON.stringify(action)}`);
-                    }
-                    //get all important info out
-                    const { identifier, action, equationIdentifier, ...args } = elem;
-                    //and put all non standard keys into arguments
-                    return { identifier, action, equationIdentifier, arguments: args};
-                })
+                if(instruction.actions instanceof Array
+                && instruction.actions.length > 0) {
+                    instruction.actions = instruction.actions.map((elem) => {
+                        if(!elem.identifier || !elem.action){
+                            throw new Error(`error in instruction:\n${JSON.stringify(instruction)}\nat action: ${JSON.stringify(action)}`);
+                        }
+                        //get all important info out
+                        const { identifier, action, equationIdentifier, ...args } = elem;
+                        //and put all non standard keys into arguments
+                        return { identifier, action, equationIdentifier, arguments: args};
+                    })
+                }
                 //return the finished instruction
                 return instruction;
-            });
+            }));
         }
         catch(error) {
-            console.warn(`error while parsing instructions in protocol ${protocol.name}\n error:\n`, error);
-            continue;
+            console.warn(`error while parsing instructions in protocol '${protocol.name}'\nerror: `, error);
+            return;
         }
         //fix target instruction ids which correspond to index in the json array for protocol creation
         try {
@@ -134,12 +142,13 @@ async function uploadProtocols(protocols){
                             referenced in instruction: \n ${JSON.stringify(elem)}`);
                     }
                 });
+                return elem;
             });
         
         }
         catch(error) {
             console.warn(`error while setting up target instruction ids in protocol ${protocol.name}\n error:\n`, error);
-            continue;
+            return;
         }
         //save this protocol
         parsedProtocols.push(protocol);
@@ -148,7 +157,6 @@ async function uploadProtocols(protocols){
     //post the request
     let responses = [];
     for(let protocol of parsedProtocols){
-        //axios
         try {
             let res = await axios.post(config.apiURL + config.apiProtocolEndpoint, protocol);
             if(res.status == 200 && res.data.success){
@@ -197,7 +205,10 @@ async function parseResult(instruction, rawResult) {
     }
     else if(Object.keys(rawResult).length == 1) {
         //short syntax 
+        //this will flatten the yaml kv object in to { description: '...', metadata: 'next instruction id' }
         const result = flattenYamlKeyValue(rawResult, 'description');
+        result.nextInstruction = result.metadata;
+        delete result.metadata;
         let path = guessImagePath(instruction, result);
         result.imageId = await uploadImage(path);
         return result;
@@ -277,5 +288,8 @@ function flattenYamlKeyValue(source, nameKey = "identifier"){
     //this flattens the metadata object into the new object
     let flattend = {};
     flattend[nameKey] = description;
-    return { ...flattend , ...metadata };
+    if(metadata instanceof Object && Object.keys(metadata).length > 1) {
+        return { ...flattend , ...metadata };
+    }
+    else return {...flattend, metadata: metadata};
 }
