@@ -7,7 +7,9 @@ const yargs = require('yargs');
 
 //specifiy the default config
 const defaultConfig = {
-    apiURL: 'http://localhost:3000/',
+    development: false,
+    developmentAPI:'http://localhost:3000/',
+    productionAPI: 'http://130.75.115.47:3000/',
     apiImageEndpoint:'image/',
     apiProtocolEndpoint: 'protocol/',
     imageBasePath: 'images/',
@@ -23,6 +25,7 @@ const argv = yargs
     .config('config', 'Path to custom config.yml', (path) => {
         return yaml.safeLoad(fs.readFileSync(path, 'utf-8'));
     })
+    .alias('development', 'd')
     .commandDir('cmds')
     .demandCommand()
     .argv;

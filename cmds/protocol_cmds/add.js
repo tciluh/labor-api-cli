@@ -15,9 +15,14 @@ module.exports.describe = "Add one or more protocols defined via yaml files"
 module.exports.builder = (yargs) => yargs.usage("Add one or more protocols defined via yaml files:\n\nUsage: $0 protocol add [files..]");
 //provide a handler function which is called when this subcommand gets executed
 let config;
+let api;
 module.exports.handler = (argv) => {
     //set file global config
     config = argv;
+    //init axios api instance
+    api = axios.create({
+        baseURL: config.development ? config.developmentAPI : config.productionAPI 
+    });
     //the files are now in argv.files
     //read them from the disk
     const files = readFiles(argv.files);
@@ -158,7 +163,7 @@ async function uploadProtocols(protocols){
     let responses = [];
     for(let protocol of parsedProtocols){
         try {
-            let res = await axios.post(config.apiURL + config.apiProtocolEndpoint, protocol);
+            let res = await api.post(config.apiProtocolEndpoint, protocol);
             if(res.status == 200 && res.data.success){
                 responses.push(res.data.payload);
             }
@@ -260,7 +265,7 @@ async function uploadImage(ipath){
     //set the image field
     form.append('image', imageStream);
     //post the request
-    let res = await axios.post(config.apiURL + config.apiImageEndpoint, form, {
+    let res = await api.post(config.apiImageEndpoint, form, {
         headers: form.getHeaders()
     });
     if(res.status == 200 && res.data.success && res.data.payload.id){

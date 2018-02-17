@@ -1,5 +1,7 @@
-apiURL: 'http://localhost:3000'
-apiImageEndpoint: 'image/'
-apiProtocolEndpoint: 'protocol/'
-imageBasePath: 'images/'
-defaultImageExtension: 'png'
+development: false
+developmentAPI: http://localhost:3000
+productionAPI: http://130.75.115.47:3000
+apiImageEndpoint: image/
+apiProtocolEndpoint: protocol/
+imageBasePath: images/
+defaultImageExtension: png
