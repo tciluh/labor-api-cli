@@ -1,41 +1,53 @@
 name: Test Protocol
 description: This is a test protocol
 instructions: #we will refer to instruction as steps and vice versa for the length of the example
-    - Add the description of step one here:
+    - Step 1 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: This is step 1 which includes putting a into b and then measuring with the photmeter
         actions:
-            - photometer:  # the name of the corresponding plugin in labor-api (required)
-                action: measure #each plugin supports certain actions (required)
-                equationIdentifier: a #each action can define a optional identifier with which it can be referenced in an equation instruction
-                wavelength: 420 # this will be passed to the plugin as well as anything which is defined here
-                current: 1 # use this to pass arguments to the plugin
-        results:
-            - add a description for a result here: #for singular result (i.e. instructions that directly to another instruction) these will probably not be displayed by the client
-                nextInstruction: 1 #the index of the next instruction. indizes start at zero, so this step would be instruction 0.
-    - Add a description for the second step here:
+            - identifier: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              equationIdentifier: value #each action can define a optional identifier with which it can be referenced in an equation instruction
+              wavelength: 420 # this will be passed to the plugin as well as anything which is defined here
+              current: 1 # use this to pass arguments to the plugin
+        results: # results are what happens when you finished this step/instruction. 
+                 # you can specify multiple results and even give each
+                 # of these a image to make deciding easier for the user
+                 # results support both a short and a long syntax
+                 # if you only specify one result, most clients wont display the result description, so feel free to put
+                 # anything you like there
+            - Something turned green: Step 2 # this is the short hand syntax. 'Something turned green' will be displayed to the user
+                                             # as the description of this result. 
+                                             # 'Step 2' is the instruction identifier of the instruction/step which should follow
+                                             # after this result was encountered/selected by the user.
+            - description: Something turned Red # this is the long syntax. again anything after description will be displayed to the user
+              nextInstruction: Step 2a # this is the instruction identifier of the instruction/step which should follow after this result
+              imagePath: /path/to/image # a relative path to an image which will be displayed to the user when choosing which result applies.
+    - Step 2:
+        description: This is step 2 where you'll wait for 60 seconds
         timerDuration: 60 # this step will show the user a timer which runs for 60 seconds
-        # equation: "a*b*c" # note that a step can either contain a equation or a timer duration otherwise protocol insertion will fail
+        results: # remember, if only a single result is defined for an instruction its description will not be shown to the user
+            - This will not be shown to the user: Step 3
+    - Step 2a:
+        description: This is variant a of Step 2 which is encountered after selecting \'Something turned Red\'
+        results: # multiple instruction can have the same 'next step' if their results point to the same instruction identifier
+            - After Step 2a was finished the user did nothing special: Step 3 # the same next step as Step 2
+    - Step 3:
+        description: After a little diversion our instruction paths converge at Step 3, where the user will try to weigh a probe
+        actions:
+            - identifier: scale
+              action: weigh
+              equationIdentifier: weight # an equation identifier can even be a multi character word
+        results:  
+            - The User weighed the probe and now prepared for calculating some experimentation results: Step 4 # this 
+    - Step 4: 
+        description: We did measure something with the photometer and weighed a probe. if we add both the result is
+        equation: weight^2 + 2*value # use the previously defined equationIdentifiers here, everything supported in ascii math will be eventually supported.
         results:
-            - Wow we did something:
-                nextInstruction: 2
-    - Add a description for the third step here:
-        results:  # steps can have multiple results like this
-            - Something turned green:  #use the result description to describe the criteria which should lead to the selection of this step by the user
-                nextInstruction: 3 # each result will have a different next instruction. this one references the instruction at index 3 (aka the fourth instruction defined)
-            - Something turned yellow: # the user will be presented with both result descriptions. he will then have to choose one, so make sure these are unique
-                nextInstruction: 4
-    - Add a description for variant a of step 4:
+            - We calculated some results: abc123456 # instruction identifiers can be anything you want
+    - abc123456: # just make sure they match up with the instruction which you want to have next.
+        description: This is the final instruction, make sure to turn the lights of and turn everything off! :)
         results:
-            - Something happened here:
-                nextInstruction: 5 # multiple instruction can have the same target instructions. this makes it easy to have a user perform additional steps before continuing with the normal protocol.
-    - add a description for variant b of step 4:
-        results:
-            - Something else happened here:
-                nextInstruction: 5 # multiple instruction can have the same target instructions. this makes it easy to have a user perform additional steps before continuing with the normal protocol.
-    - add a description for the final step here: #instructions which have a result without a nextInstruction will be considered a final instruction by the client
-        equation: "a + b * 2" # sometimes you'd probably like to display a calculated value at the end of a protocol. use recorded measurements here via their equation identifier.
-        results:
-            - experiment finished:
-                nextInstruction: null
+            - experiment is finished: null # if you specify null as the next instruction, the labor-api-cli will know that this is your last instruction.
 
 
     
