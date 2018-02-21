@@ -113,7 +113,11 @@ async function uploadProtocols(protocols){
                     throw new Error(`instruction: ${instruction.identifier}\n has both 'equation' and 'timerDuration' defined!`);
                 }
                 //upload the image
-                const ipath = guessImagePath(instruction);
+                let ipath = guessImagePath(instruction);
+                //append protocol base image path
+                if(protocol.imageBasePath) {
+                    ipath = path.join(protocol.imageBasePath, ipath);
+                }
                 try {
                     instruction.imageId = await uploadImage(ipath);
                 }
@@ -131,7 +135,7 @@ async function uploadProtocols(protocols){
                 try {
                     instruction.results = await Promise.all(instruction.results.map(async (elem) => {
                         try {
-                            const results = await parseResult(instruction, elem);
+                            const results = await parseResult(protocol, instruction, elem);
                             return results;
                         }
                         catch(error) {
@@ -224,21 +228,25 @@ async function uploadProtocols(protocols){
  *      nextInstruction: 'an instruction identifier', //required
  *      imagePath: '/path/to/image/' //optional
  *   }
+ *  @param protocol The protocol to which this results belongs
  *  @param instruction The already parsed instruction to which this result belongs.
  *  @param rawResult The parsed but not yet decoded yaml representation. If the given js object has more than 2 keys, it will be
  *  treated as being in the long syntax.
  *  @return a decoded and parsed result ready for the labor-api.
  *  @throws Error If the result cannot be decoded.
  */
-async function parseResult(instruction, rawResult) {
+async function parseResult(protocol, instruction, rawResult) {
     if(!rawResult) throw new Error('cant decode null raw result');
     if(Object.keys(rawResult).length >= 2) {
         //long syntax 
         //no need to flatten
         if(!rawResult.description) throw new Error(`cant decode result in long syntax without description, at instruction \n ${JSON.stringify(instruction)}\nresult: ${rawResult}}`);
-        let path = guessImagePath(instruction, rawResult);
+        let ipath = guessImagePath(instruction, rawResult);
+        if(protocol.imageBasePath) {
+            ipath = path.join(protocol.imageBasePath, ipath);
+        }
         try{
-            rawResult.imageId = await uploadImage(path);
+            rawResult.imageId = await uploadImage(ipath);
         }
         catch(error) {
             if(rawResult.imagePath) {
@@ -256,7 +264,10 @@ async function parseResult(instruction, rawResult) {
         const result = flattenYamlKeyValue(rawResult, 'description');
         result.nextInstruction = result.metadata;
         delete result.metadata;
-        let path = guessImagePath(instruction, result);
+        let ipath = guessImagePath(instruction, result);
+        if(protocol.imageBasePath) {
+            ipath = path.join(protocol.imageBasePath, ipath);
+        }
         try {
             result.imageId = await uploadImage(path);
         }
