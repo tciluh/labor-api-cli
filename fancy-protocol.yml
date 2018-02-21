@@ -1,9 +1,9 @@
 name: Fancy Test Protocol
 description: This is a test protocol with pictures
+imageBasePath: fancy/
 instructions: 
     - Step 1:
         description: Always wear gloves!
-        imagePath: fancy/Step 1.png
         actions:
             - identifier: photometer
               action: measure #each plugin supports certain actions (required)
@@ -14,7 +14,6 @@ instructions:
             - add a description for a result here: Step 2 #for singular result (i.e. instructions that directly to another instruction) these will probably not be displayed by the client
     - Step 2:
         description: Put something in
-        imagePath: fancy/Step 2.png
         results:
             - Something was put in: Step 3
     - Step 3:
@@ -25,28 +24,22 @@ instructions:
             - We waited for 60 secs: Step 4
     - Step 4:
         description: Check for cloudiness of your sample
-        imagePath: fancy/Step 4.png
         results:  # steps can have multiple results like this
             - description: The sample is cloudy  #use the result description to describe the criteria which should lead to the selection of this step by the user
-              imagePath: fancy/Step 4r0.png
               nextInstruction: Step 5a
             - description: The sample is not cloudy
-              imagePath: fancy/Step 4r1.png
               nextInstruction: Step 5b
 
     - Step 5a:
         description: Add some silicone
-        imagePath: fancy/Step 5a.png
         results:
             - We added some silicone: Step 6
     - Step 5b:
         description: Add something that is not silicone please!
-        imagePath: fancy/Step 5b.png
         results:
             - We added something that did not contain silicone: Step 6
     - Step 6: 
         description: Yeah you are done with this protocol. Enjoy this fancy equation x) 
-        imagePath: fancy/Step 6.png
         equation: "\"Brightness\" = a + b * 2" # sometimes you'd probably like to display a calculated value at the end of a protocol. use recorded measurements here via their equation identifier.
         results:
             - experiment finished: null
