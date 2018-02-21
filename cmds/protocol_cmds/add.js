@@ -110,16 +110,16 @@ async function uploadProtocols(protocols){
                 identifierToIndex[instruction.identifier] = index;
                 //make sure its either a simple, equation or timer instruction
                 if(instruction.equation && instruction.timerDuration) {
-                    throw new Error(`instruction: ${JSON.stringify(instruction)}\n has both 'equation' and 'timerDuration' defined!`);
+                    throw new Error(`instruction: ${instruction.identifier}\n has both 'equation' and 'timerDuration' defined!`);
                 }
                 //upload the image
                 const ipath = guessImagePath(instruction);
                 try {
-                    instruction.imageId = await uploadImage(file, ipath);
+                    instruction.imageId = await uploadImage(ipath);
                 }
                 catch(error) {
                     if(instruction.imagePath) {
-                        log.error(file, `error while uploading image: `, error);
+                        log.error(file, `instruction: ${instruction.identifier} `, `error while uploading image: `, error);
                         throw new Error();
                     }
                     else {
@@ -140,7 +140,7 @@ async function uploadProtocols(protocols){
                     }));
                 }
                 catch(error) {
-                    log.error(file, `error while parsing results: `, error);
+                    log.error(file, `instruction: ${instruction.identifier} `, `error while parsing results: `, error);
                     throw new Error();
                 }
                 //parse any actions
@@ -148,7 +148,7 @@ async function uploadProtocols(protocols){
                 && instruction.actions.length > 0) {
                     instruction.actions = instruction.actions.map((elem) => {
                         if(!elem.identifier || !elem.action){
-                            throw new Error(`error in instruction:\n${JSON.stringify(instruction)}\nat action: ${JSON.stringify(action)}`);
+                            throw new Error(`instruction: ${instruction.identifier} action : ${JSON.stringify(elem, null, '\t')} is missing identifier or action`);
                         }
                         //get all important info out
                         const { identifier, action, equationIdentifier, ...args } = elem;
