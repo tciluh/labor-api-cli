@@ -14,7 +14,7 @@ let api;
 module.exports.handler = (argv) => {
     //init axios api instance
     api = axios.create({
-        baseURL: config.development ? config.developmentAPI : config.productionAPI 
+        baseURL: argv.development ? argv.developmentAPI : argv.productionAPI 
     });
     //id is in argv.id
     log.info(`deleting protocol with id: ${argv.id}`)
