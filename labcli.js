@@ -7,9 +7,12 @@ const yargs = require('yargs');
 const Winston = require('winston');
 global.log = new (Winston.Logger) ({
        transports: [
-           new (Winston.transports.Console)(),
+           new (Winston.transports.Console)({
+                level: 'info' 
+           }),
            new (Winston.transports.File) ({ 
                filename: 'labcli.log', 
+               level: 'debug',
                handleExceptions: true,
                humanReadableUnhandledException: true
            })
