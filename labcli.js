@@ -8,7 +8,8 @@ const Winston = require('winston');
 global.log = new (Winston.Logger) ({
        transports: [
            new (Winston.transports.Console)({
-                level: 'info' 
+               level: 'info',
+               colorize: true
            }),
            new (Winston.transports.File) ({ 
                filename: 'labcli.log', 
