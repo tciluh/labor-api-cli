@@ -1,21 +1,20 @@
 {
-  "name": "la-cli",
+  "name": "labor-api-cli",
   "version": "0.0.1",
   "description": "CLI Tool for Labor API",
-  "main": "main.js",
+  "main": "labcli.js",
   "scripts": {
-    "start": "nodemon labcli",
-    "run": "nodemon labcli"
+    "start": "labcli.js",
+    "run": "labcli.js"
   },
   "author": "Malte Bargholz",
   "license": "MIT",
-  "devDependencies": {
-    "nodemon": "^1.12.1"
-  },
+  "devDependencies": {},
   "dependencies": {
     "axios": "^0.16.2",
     "form-data": "^2.3.1",
     "js-yaml": "^3.10.0",
+    "winston": "^2.4.0",
     "yargs": "^9.0.1"
   }
 }
