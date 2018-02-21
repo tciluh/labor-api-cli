@@ -5,11 +5,11 @@ instructions:
         description: Always wear gloves!
         imagePath: fancy/Step 1.png
         actions:
-            - photometer:  # the name of the corresponding plugin in labor-api (required)
-                action: measure #each plugin supports certain actions (required)
-                equationIdentifier: a #each action can define a optional identifier with which it can be referenced in an equation instruction
-                wavelength: 420 # this will be passed to the plugin as well as anything which is defined here
-                current: 1 # use this to pass arguments to the plugin
+            - identifier: photometer
+              action: measure #each plugin supports certain actions (required)
+              equationIdentifier: a #each action can define a optional identifier with which it can be referenced in an equation instruction
+              wavelength: 420 # this will be passed to the plugin as well as anything which is defined here
+              current: 1 # use this to pass arguments to the plugin
         results:
             - add a description for a result here: Step 2 #for singular result (i.e. instructions that directly to another instruction) these will probably not be displayed by the client
     - Step 2:
@@ -27,7 +27,7 @@ instructions:
         description: Check for cloudiness of your sample
         imagePath: fancy/Step 4.png
         results:  # steps can have multiple results like this
-            - description: The sample is cloudy:  #use the result description to describe the criteria which should lead to the selection of this step by the user
+            - description: The sample is cloudy  #use the result description to describe the criteria which should lead to the selection of this step by the user
               imagePath: fancy/Step 4r0.png
               nextInstruction: Step 5a
             - description: The sample is not cloudy
