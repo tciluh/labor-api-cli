@@ -24,19 +24,24 @@ module.exports.handler = (argv) => {
         baseURL: config.development ? config.developmentAPI : config.productionAPI 
     });
     //the files are now in argv.files
+    log.info(`adding protocols`)
+    log.info(`got ${argv.files.length} files.`);
+    argv.files.forEach(file => log.verbose(`- ${path.normalize(file)}`));
     //read them from the disk
     const files = readFiles(argv.files);
     //try sending them to the API
     uploadProtocols(files)
-        .then((protocols) => {
-            console.log("succesfully inserted protocols")
-            console.info("API Response: ");
-            console.info(JSON.stringify(protocols, null, '  '));
+        .then((count) => {
+            log.info(`succesfully inserted ${count}/${argv.files.length} protocols`)
+            if(count == 0 && argv.files.length > 0 ) {
+                process.exit(1);
+            }
+            else{
+                process.exit(0);
+            }
         })
         .catch((error) => {
-            console.error("error uploading protocols to API!");
-            console.error(error);
-
+            log.error(`critical error adding protocols: `, error);
         })
 }
 
@@ -45,27 +50,33 @@ module.exports.handler = (argv) => {
  * @returns An array of strings containing the files which could be read.
  */
 function readFiles(files){
-    let parsedFiles = [];
+    let parsedFiles = new Map();
     for(let file of files)  {
+        const fbase = path.basename(file) + ' ';
+        log.info(fbase, `reading file`)
         //first read from disk
         let input;
         try{
             input = fs.readFileSync(file);
         }
         catch(error){
-            console.error("error reading file: " + file);
-            console.error(error);
+            log.error(fbase, `error reading file:\n`, error);
             continue;
         }
         //then parse
+        log.info(fbase, `parsing yaml`);
         try{
             const parsed = yaml.safeLoad(input);
             //only if reading and parsing was succesful add to parsed files
-            parsedFiles.push(parsed);
+            if(parsedFiles.has(file)) {
+                log.error(fbase, `file was parsed already. skipping!`);
+            }
+            else {
+                parsedFiles.set(fbase , parsed);
+            }
         }
         catch(error){
-            console.error("error parsing file: " + file);
-            console.error(error);
+            log.error(fbase, `error parsing file: `, error);
             continue;
         }
     }
@@ -75,19 +86,20 @@ function readFiles(files){
 
 
 /** The main Upload function.
- * @param protocols An array of JSON representations of the protocol files to upload
+ * @param protocols A Map of filename to JSON representations of the protocol files to upload
  * @returns The API response if successful otherwise this throws an Error
  */
 async function uploadProtocols(protocols){
     //insert the protocols via the api
-    //first convert yaml syntax to valid api syntax
-    const parsedProtocols = [];
-    for(const protocol of protocols) {
+    let completed = 0;
+    for(const [file, protocol] of protocols) {
+        log.info(file, 'parsing protocol syntax');
         if(!protocol.name || !protocol.description) {
-            console.warn(`skipping protocol: \n ${JSON.stringify(protocol)}\n needs both a description and a name`);
+            console.error(file, ` protocol has no description or name.`);
             continue;
         }
         let identifierToIndex = {};
+        log.info(file, `parsing instructions & results`);
         try {
             protocol.instructions = await Promise.all(protocol.instructions.map(async (elem, index) => {
                 //a instruction is consisted of an instruction identifier
@@ -102,12 +114,35 @@ async function uploadProtocols(protocols){
                 }
                 //upload the image
                 const ipath = guessImagePath(instruction);
-                instruction.imageId = await uploadImage(ipath);
+                try {
+                    instruction.imageId = await uploadImage(file, ipath);
+                }
+                catch(error) {
+                    if(instruction.imagePath) {
+                        log.error(file, `error while uploading image: `, error);
+                        throw new Error();
+                    }
+                    else {
+                        //do nothing. this path was guessed. 
+                    }
+                }
                 //parse results but dont set target instruction ids yet.
                 //this will decode the description and upload any images
-                instruction.results = await Promise.all(instruction.results.map(async (elem) => {
-                    return await parseResult(instruction, elem)
-                }));
+                try {
+                    instruction.results = await Promise.all(instruction.results.map(async (elem) => {
+                        try {
+                            const results = await parseResult(instruction, elem);
+                            return results;
+                        }
+                        catch(error) {
+                            throw error; 
+                        }
+                    }));
+                }
+                catch(error) {
+                    log.error(file, `error while parsing results: `, error);
+                    throw new Error();
+                }
                 //parse any actions
                 if(instruction.actions instanceof Array
                 && instruction.actions.length > 0) {
@@ -126,10 +161,11 @@ async function uploadProtocols(protocols){
             }));
         }
         catch(error) {
-            console.warn(`error while parsing instructions in protocol '${protocol.name}'\nerror: `, error);
-            return;
+            log.error(file, `error while parsing instructions: `, error);
+            continue;
         }
         //fix target instruction ids which correspond to index in the json array for protocol creation
+        log.info(file, `setting up instruction<->result relationships`);
         try {
             protocol.instructions = protocol.instructions.map((elem) => {
                 elem.results = elem.results.map((result) => {
@@ -152,29 +188,25 @@ async function uploadProtocols(protocols){
         
         }
         catch(error) {
-            console.warn(`error while setting up target instruction ids in protocol ${protocol.name}\n error:\n`, error);
-            return;
+            log.error(file,`error while setting up relationships: `, error);
+            continue;
         }
-        //save this protocol
-        parsedProtocols.push(protocol);
-    }
-    //second POST the protocol json to the protocol api
-    //post the request
-    let responses = [];
-    for(let protocol of parsedProtocols){
+        //uploading to api
+        log.info(file, `uploading to api at: ${api.defaults.baseURL}`)
         try {
-            let res = await api.post(config.apiProtocolEndpoint, protocol);
+            const res = await api.post(config.apiProtocolEndpoint, protocol);
             if(res.status == 200 && res.data.success){
-                responses.push(res.data.payload);
+                log.info(file, `upload complete`)
+                completed++;
             }
             else throw new Error(`invalid status code ${res.status} or success flag not set from api`);
         }
         catch(error) {
-            console.warn(`error while POSTing the protocol to the Labor-API at ${config.apiUrl}${config.apiProtocolEndpoint}
-            \n protocol: `, protocol, '\n error:', error);
+            log.error(file, `error while uploading protocol: `, error) 
+            continue;
         }
     }
-    return responses;
+    return completed;
 }
 
 /** Parses a API correct result object from the yaml syntax.
@@ -205,7 +237,17 @@ async function parseResult(instruction, rawResult) {
         //no need to flatten
         if(!rawResult.description) throw new Error(`cant decode result in long syntax without description, at instruction \n ${JSON.stringify(instruction)}\nresult: ${rawResult}}`);
         let path = guessImagePath(instruction, rawResult);
-        rawResult.imageId = await uploadImage(path);
+        try{
+            rawResult.imageId = await uploadImage(path);
+        }
+        catch(error) {
+            if(rawResult.imagePath) {
+                throw error;
+            }
+            else {
+                //do nothing. the path was guessed. 
+            }
+        }
         return rawResult;
     }
     else if(Object.keys(rawResult).length == 1) {
@@ -215,7 +257,17 @@ async function parseResult(instruction, rawResult) {
         result.nextInstruction = result.metadata;
         delete result.metadata;
         let path = guessImagePath(instruction, result);
-        result.imageId = await uploadImage(path);
+        try {
+            result.imageId = await uploadImage(path);
+        }
+        catch(error) {
+            if(result.imagePath) {
+                throw error; 
+            }
+            else {
+                //do nothing. the path was guessed. 
+            }
+        }
         return result;
     }
     else {
@@ -235,6 +287,7 @@ async function parseResult(instruction, rawResult) {
  * @returns The guessed imagePath or null if something went wrong
  */
 function guessImagePath(instruction, result = null) {
+    log.debug(`guessing image path for i: `, instruction, ` r: `, result);
     if(!instruction) return null;
     if(instruction.imagePath && !result) return instruction.imagePath;
     if(result && result.imagePath) return result.imagePath;
@@ -245,18 +298,19 @@ function guessImagePath(instruction, result = null) {
         ipath += `_result_${instruction.results.indexOf(result)}`;
     }
     ipath += `.${config.defaultImageExtension}`;
+    log.debug(`guessed path: `, ipath);
     return ipath;
 }
 
 /** Upload an image to the api/image/ and return the id returned by api 
  * @param ipath the path to image inside the folder defined by the imageBasePath config paramter
- *  @returns The image id returned by the api or null if something failed
+ * @returns The image id returned by the api or null if something failed
+ * @throws Error If the image upload failed.
  **/
 async function uploadImage(ipath){
     let fullPath = path.join(config.imageBasePath, ipath);
     if(!fs.existsSync(fullPath)) {
-        console.warn(`couldnt find image at path: ${fullPath}, does it exist?`);
-        return null;
+        throw new Error(`couldnt find image at path: ${fullPath}, does it exist?`);
     }
     //create read stream for image
     let imageStream = fs.createReadStream(fullPath);
@@ -273,8 +327,7 @@ async function uploadImage(ipath){
         return res.data.payload.id;
     }
     else{
-        console.warn(`recieved strange response from image api:\n${JSON.stringify(res.data, null, '  ')} \n while trying to upload image at path: ${fullPath}`);
-        return null;
+        throw new Error(`recieved strange response from image api:`, res.data, `while trying to upload image at path: ${fullPath}`);
     }
 }
 
