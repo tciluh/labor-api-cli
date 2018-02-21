@@ -1,4 +1,8 @@
 node_modules/
 .*.sw*
 sop.sqlite
-.vscode/
+.Vscode/
+*.DS_Store
+.AppleDouble
+.LSOverride
+labcli.log
