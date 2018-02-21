@@ -1,0 +1,38 @@
+name: Action Test Protocol 
+description: Protocol to test plugin actions 
+instructions: #we will refer to instruction as steps and vice versa for the length of the example
+    - Step 0:
+        description: BliBlaBlubb
+        actions:
+            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              equationIdentifier: a #each action can define a optional identifier with which it can be referenced in an equation instruction
+              wavelength: 420 # this will be passed to the plugin as well as anything which is defined here
+            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+              action: zero
+              equationIdentifier: b
+            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+              action: setTurret
+              position: 0
+            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+              action: setTurret
+              position: 1
+            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+              action: setTurret
+              position: 2
+            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+              action: setTurret
+              position: 3
+            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+              action: setTurret
+              position: 4
+            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+              action: setWavelength
+              wavelength: 420
+            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+              action: setWavelength
+              wavelength: 600
+        results:
+            - acbc234: null
+
+    
