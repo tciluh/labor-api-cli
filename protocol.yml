@@ -1,9 +1,10 @@
 name: Test Protocol
 description: This is a test protocol
+imageBasePath: example/ # a path relative to the global image base path defined via config.yml. This path will be appended before any generated or explictly set imagePath s.
 instructions: #we will refer to instruction as steps and vice versa for the length of the example
     - Step 1 : # this is the instruction identifier which is later used for target this instruction with a result
-        description: This is step 1 which includes putting a into b and then measuring with the photmeter
-        actions:
+        description: This is step 1 which includes putting a into b and then measuring it with the photometer
+        actions: # actions describe anything that happens with an external device
             - identifier: photometer # the name of the corresponding plugin in labor-api (required)
               action: measure #each plugin supports certain actions (required)
               equationIdentifier: value #each action can define a optional identifier with which it can be referenced in an equation instruction
@@ -21,9 +22,12 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
                                              # after this result was encountered/selected by the user.
             - description: Something turned Red # this is the long syntax. again anything after description will be displayed to the user
               nextInstruction: Step 2a # this is the instruction identifier of the instruction/step which should follow after this result
-              # imagePath: /path/to/image # a relative path to an image which will be displayed to the user when choosing which result applies. 
-              # make sure to uncomment this if you want to use it
+              imagePath: custom.png 
+              # a relative path to an image which will be displayed to the user when choosing which result applies. 
+              # the full image path will be constructed like this: config.imageBasePath/protocol.imageBasePath/{instruction/result}.imagePath
+              # meaning in this case: ${lab-cli-root}/images/example/custom.png
               # explicitly defined image paths that do not exists will throw an error if parsed.
+              # see Step 2a for more information.
     - Step 2:
         description: This is step 2 where you'll wait for 60 seconds
         timerDuration: 60 # this step will show the user a timer which runs for 60 seconds
@@ -31,6 +35,10 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
             - This will not be shown to the user: Step 3
     - Step 2a:
         description: This is variant a of Step 2 which is encountered after selecting \'Something turned Red\'
+        imagePath: Step 2a.png # both instructions and results can have images set. if no image path is set the labor-api-cli will
+                               # try to guess the path with the following scheme: 
+                               # ${instruction identifier}.${config.defaultImageExtension} for instructions (i.e. Step 2a.png in this case)
+                               # ${instruction identfier}r{result index}.${config.defaultImageExtension} for results.
         results: # multiple instruction can have the same 'next step' if their results point to the same instruction identifier
             - After Step 2a was finished the user did nothing special: Step 3 # the same next step as Step 2
     - Step 3:
