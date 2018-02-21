@@ -10,7 +10,12 @@ module.exports.describe = "delete a protocol with the given id"
 //sets the usage since is not done automatically for some reason
 module.exports.builder = (yargs) => yargs.usage("Delete a protocol with the given id:\n\nUsage: $0 protocol delete <id>");
 //provide a handler function which is called when this subcommand gets executed
+let api;
 module.exports.handler = (argv) => {
+    //init axios api instance
+    api = axios.create({
+        baseURL: config.development ? config.developmentAPI : config.productionAPI 
+    });
     //id is in argv.id
     deleteProtocol(argv.id, argv)
         .then(() => console.log(`protocol with ID: ${argv.id} succesfully deleted`))
@@ -21,7 +26,7 @@ module.exports.handler = (argv) => {
  * @param id The protocol id to delete
  */
 async function deleteProtocol(id, argv){
-    let res = axios.delete(argv.apiURL + argv.apiProtocolEndpoint, {
+    let res = await api.delete(argv.apiProtocolEndpoint, {
         params: { id: id }
     });
     if(res.status != 200) throw new Error(`strange response from server: ${JSON.stringify(res, null, '  ')}`);
