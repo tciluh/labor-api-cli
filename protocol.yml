@@ -21,7 +21,9 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
                                              # after this result was encountered/selected by the user.
             - description: Something turned Red # this is the long syntax. again anything after description will be displayed to the user
               nextInstruction: Step 2a # this is the instruction identifier of the instruction/step which should follow after this result
-              imagePath: /path/to/image # a relative path to an image which will be displayed to the user when choosing which result applies.
+              # imagePath: /path/to/image # a relative path to an image which will be displayed to the user when choosing which result applies. 
+              # make sure to uncomment this if you want to use it
+              # explicitly defined image paths that do not exists will throw an error if parsed.
     - Step 2:
         description: This is step 2 where you'll wait for 60 seconds
         timerDuration: 60 # this step will show the user a timer which runs for 60 seconds
