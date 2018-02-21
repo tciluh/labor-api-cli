@@ -17,9 +17,14 @@ module.exports.handler = (argv) => {
         baseURL: config.development ? config.developmentAPI : config.productionAPI 
     });
     //id is in argv.id
-    deleteProtocol(argv.id, argv)
-        .then(() => console.log(`protocol with ID: ${argv.id} succesfully deleted`))
-        .catch((error) => console.error(`error deleting protocol:\n ${error}`));
+    log.info(`deleting protocol with id: ${argv.id}`)
+    if(!argv.id || Number.isNaN(argv.id) || !Number.isFinite(argv.id)) {
+        log.error(`${argv.id} is not a valid protocol id]`) ;
+    }
+    const id = Number.parseInt(argv.id);
+    deleteProtocol(id)
+        .then(() => log.info(`protocol with ID: ${id} succesfully deleted`))
+        .catch(error => log.error(`error deleting protocol:\n`, error));
 }
 
 /** Deletes a protocol with the given id

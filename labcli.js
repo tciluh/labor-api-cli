@@ -4,6 +4,21 @@
 const yaml = require('js-yaml');
 const fs = require('fs');
 const yargs = require('yargs');
+const Winston = require('winston');
+global.log = new (Winston.Logger) ({
+       transports: [
+           new (Winston.transports.Console)({
+               level: 'info',
+               colorize: true
+           }),
+           new (Winston.transports.File) ({ 
+               filename: 'labcli.log', 
+               level: 'debug',
+               handleExceptions: true,
+               humanReadableUnhandledException: true
+           })
+       ]
+});
 
 //specifiy the default config
 const defaultConfig = {
@@ -26,6 +41,7 @@ const argv = yargs
         return yaml.safeLoad(fs.readFileSync(path, 'utf-8'));
     })
     .alias('development', 'd')
+    .help('development', 'Enable Developer Mode')
     .commandDir('cmds')
     .demandCommand()
     .argv;
