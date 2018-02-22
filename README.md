@@ -7,11 +7,12 @@ A command line tool for interacting with `labor-api` project.
 ## Installation
 - make sure that all dependency's are installed
 - install all node modules: `npm install`
-- start the main.js: `npm start` or `node main.js`
 
-##Usage
+## Usage
 
 ### add a protocol
-`labcli protocol add <protocol yaml files>`
+`./labcli.js protocol add <protocol yaml files>` (see `examples/` for examples)
 ### delete a protocol
-`labcli protocol delete <protocol id>`
+`./labcli.js protocol delete <protocol id>`
+### list all protocols
+`./labcli.js protocol list`
