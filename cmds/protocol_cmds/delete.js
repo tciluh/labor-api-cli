@@ -22,7 +22,7 @@ module.exports.handler = (argv) => {
         log.error(`${argv.id} is not a valid protocol id]`) ;
     }
     const id = Number.parseInt(argv.id);
-    deleteProtocol(id)
+    deleteProtocol(id, argv)
         .then(() => log.info(`protocol with ID: ${id} succesfully deleted`))
         .catch(error => log.error(`error deleting protocol:\n`, error));
 }
@@ -31,8 +31,6 @@ module.exports.handler = (argv) => {
  * @param id The protocol id to delete
  */
 async function deleteProtocol(id, argv){
-    let res = await api.delete(argv.apiProtocolEndpoint, {
-        params: { id: id }
-    });
+    let res = await api.delete(`${argv.apiProtocolEndpoint}${id}`);
     if(res.status != 200) throw new Error(`strange response from server: ${JSON.stringify(res, null, '  ')}`);
 }
