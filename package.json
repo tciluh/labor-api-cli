@@ -7,6 +7,18 @@
     "start": "labcli.js",
     "run": "labcli.js"
   },
+  "eslintConfig": {
+    "rules": {
+      "indent": [
+        "error",
+        4
+      ]
+    }
+  },
+  "standardx": {
+    "globals": ["log"]
+  
+  },
   "author": "Malte Bargholz",
   "license": "MIT",
   "devDependencies": {},
