@@ -7,6 +7,7 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
         actions: # actions describe anything that happens with an external device
             - plugin: photometer # the name of the corresponding plugin in labor-api (required)
               action: measure #each plugin supports certain actions (required)
+              humanReadableName: 'Measure a value at wavelength = 420nm' # this will be shown the user instead of plugin/action name.
               equationIdentifier: value #each action can define a optional identifier with which it can be referenced in an equation instruction
               wavelength: 420 # this will be passed to the plugin as well as anything which is defined here
               current: 1 # use this to pass arguments to the plugin
@@ -46,6 +47,7 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
         actions:
             - plugin: scale
               action: weigh
+              humanReadableName: 'Weigh a probe' # this will be shown the user instead of plugin/action name.
               equationIdentifier: weight # an equation identifier can even be a multi character word
         results:  
             - The User weighed the probe and now prepared for calculating some experimentation results: Step 4 # this 
