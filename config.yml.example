@@ -1,4 +1,4 @@
-development: false
+dev: false
 developmentAPI: http://localhost:3000
 productionAPI: http://130.75.115.47:3000
 apiImageEndpoint: image/

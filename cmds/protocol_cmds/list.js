@@ -13,7 +13,7 @@ let api
 module.exports.handler = (argv) => {
     // init axios api instance
     api = axios.create({
-        baseURL: argv.development ? argv.developmentAPI : argv.productionAPI
+        baseURL: argv.dev ? argv.developmentAPI : argv.productionAPI
     })
     log.info(`listing all protocols available at: ${api.defaults.baseURL}`)
     listProtocols(argv)

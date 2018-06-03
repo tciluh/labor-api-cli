@@ -21,7 +21,7 @@ module.exports.handler = (argv) => {
     config = argv
     // init axios api instance
     api = axios.create({
-        baseURL: config.development ? config.developmentAPI : config.productionAPI
+        baseURL: config.dev ? config.developmentAPI : config.productionAPI
     })
     // the files are now in argv.files
     log.info(`adding protocols`)

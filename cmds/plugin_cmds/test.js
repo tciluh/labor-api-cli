@@ -16,7 +16,7 @@ module.exports.handler = (argv) => {
     argv.ids.forEach(id => log.verbose(`- ${id}`))
     
     let resultsPending = []
-    const api = argv.development ? argv.developmentAPI : argv.productionAPI
+    const api = argv.dev ? argv.developmentAPI : argv.productionAPI
     socket = io(api, {
         timeout: 2000
     })
