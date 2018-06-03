@@ -21,7 +21,7 @@ module.exports.handler = (argv) => {
     config = argv
     // init axios api instance
     api = axios.create({
-        baseURL: config.development ? config.developmentAPI : config.productionAPI
+        baseURL: config.dev ? config.developmentAPI : config.productionAPI
     })
     // the files are now in argv.files
     log.info(`adding protocols`)
@@ -141,13 +141,13 @@ async function uploadProtocols (protocols) {
                 if (instruction.actions instanceof Array &&
                 instruction.actions.length > 0) {
                     instruction.actions = instruction.actions.map((elem) => {
-                        if (!elem.identifier || !elem.action) {
-                            throw new Error(`instruction: ${instruction.identifier} action : ${JSON.stringify(elem, null, '\t')} is missing identifier or action`)
+                        if (!elem.plugin || !elem.action || !elem.humanReadableName) {
+                            throw new Error(`instruction: ${instruction.identifier} action : ${JSON.stringify(elem, null, '\t')} is missing plugin, action or humanReadableName`)
                         }
                         // get all important info out
-                        const { identifier, action, equationIdentifier, ...args } = elem
+                        const { plugin, action, equationIdentifier, humanReadableName, ...args } = elem
                         // and put all non standard keys into arguments
-                        return { identifier, action, equationIdentifier, arguments: args }
+                        return { plugin, action, humanReadableName, equationIdentifier, arguments: args }
                     })
                 }
                 // return the finished instruction

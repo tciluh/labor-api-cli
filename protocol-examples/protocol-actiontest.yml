@@ -4,33 +4,42 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
     - Step 0:
         description: BliBlaBlubb
         actions:
-            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+            - plugin: photometer  # the name of the corresponding plugin in labor-api (required)
               action: measure #each plugin supports certain actions (required)
+              humanReadableName: Testing measure. # this will be shown to the user as the name of the action
               equationIdentifier: a #each action can define a optional identifier with which it can be referenced in an equation instruction
               wavelength: 420 # this will be passed to the plugin as well as anything which is defined here
-            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+            - plugin: photometer  # the name of the corresponding plugin in labor-api (required)
               action: zero
+              humanReadableName: Testing zero. # this will be shown to the user as the name of the action
               equationIdentifier: b
-            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+            - plugin: photometer  # the name of the corresponding plugin in labor-api (required)
               action: setTurret
+              humanReadableName: Testing setTurret with \#0. # this will be shown to the user as the name of the action
               position: 0
-            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+            - plugin: photometer  # the name of the corresponding plugin in labor-api (required)
               action: setTurret
+              humanReadableName: Testing setTurret with \#1. # this will be shown to the user as the name of the action
               position: 1
-            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+            - plugin: photometer  # the name of the corresponding plugin in labor-api (required)
               action: setTurret
+              humanReadableName: Testing setTurret with \#2. # this will be shown to the user as the name of the action
               position: 2
-            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+            - plugin: photometer  # the name of the corresponding plugin in labor-api (required)
               action: setTurret
+              humanReadableName: Testing setTurret with \#3. # this will be shown to the user as the name of the action
               position: 3
-            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+            - plugin: photometer  # the name of the corresponding plugin in labor-api (required)
               action: setTurret
+              humanReadableName: Testing setTurret with \#4. # this will be shown to the user as the name of the action
               position: 4
-            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+            - plugin: photometer  # the name of the corresponding plugin in labor-api (required)
               action: setWavelength
+              humanReadableName: Testing setWavelength with wl=420nm. # this will be shown to the user as the name of the action
               wavelength: 420
-            - identifier: photometer  # the name of the corresponding plugin in labor-api (required)
+            - plugin: photometer  # the name of the corresponding plugin in labor-api (required)
               action: setWavelength
+              humanReadableName: Testing setWavelength with wl=600nm. # this will be shown to the user as the name of the action
               wavelength: 600
         results:
             - acbc234: null

@@ -1,0 +1,30 @@
+name: Small Action Test Protocol
+description: Only tests the test-plugin 
+instructions: #we will refer to instruction as steps and vice versa for the length of the example
+    - Step 0:
+        description: BliBlaBlubb
+        actions:
+            - plugin: test-plugin  # the name of the corresponding plugin in labor-api (required)
+              action: double  #each plugin supports certain actions (required)
+              humanReadableName: This Action returns a double
+              equationIdentifier: a #each action can define a optional plugin with which it can be referenced in an equation instruction
+            - plugin: test-plugin  # the name of the corresponding plugin in labor-api (required)
+              action: "null"
+              humanReadableName: 'This Action returns null'
+              equationIdentifier: b
+            - plugin: test-plugin  # the name of the corresponding plugin in labor-api (required)
+              action: double
+              humanReadableName: 'This Action returns a double'
+              equationIdentifier: c
+            - plugin: test-plugin
+              action: double
+              humanReadableName: 'This Action returns a double'
+              equationIdentifier: d
+            - plugin: test-plugin  # the name of the corresponding plugin in labor-api (required)
+              action: error
+              humanReadableName: 'This Action returns an error'
+              equationIdentifier: e
+        results:
+            - acbc234: null
+
+    

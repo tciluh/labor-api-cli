@@ -5,7 +5,7 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
     - Step 1 : # this is the instruction identifier which is later used for target this instruction with a result
         description: This is step 1 which includes putting a into b and then measuring it with the photometer
         actions: # actions describe anything that happens with an external device
-            - identifier: photometer # the name of the corresponding plugin in labor-api (required)
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
               action: measure #each plugin supports certain actions (required)
               equationIdentifier: value #each action can define a optional identifier with which it can be referenced in an equation instruction
               wavelength: 420 # this will be passed to the plugin as well as anything which is defined here
@@ -44,7 +44,7 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
     - Step 3:
         description: After a little diversion our instruction paths converge at Step 3, where the user will try to weigh a probe
         actions:
-            - identifier: scale
+            - plugin: scale
               action: weigh
               equationIdentifier: weight # an equation identifier can even be a multi character word
         results:  
