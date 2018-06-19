@@ -145,9 +145,9 @@ async function uploadProtocols (protocols) {
                             throw new Error(`instruction: ${instruction.identifier} action : ${JSON.stringify(elem, null, '\t')} is missing plugin, action or humanReadableName`)
                         }
                         // get all important info out
-                        const { plugin, action, equationIdentifier, humanReadableName, ...args } = elem
+                        const { plugin, action, equationIdentifier, humanReadableName, unit, ...args } = elem
                         // and put all non standard keys into arguments
-                        return { plugin, action, humanReadableName, equationIdentifier, arguments: args }
+                        return { plugin, action, humanReadableName, equationIdentifier, unit, arguments: args }
                     })
                 }
                 // return the finished instruction

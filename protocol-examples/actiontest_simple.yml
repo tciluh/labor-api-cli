@@ -8,6 +8,7 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
               action: double  #each plugin supports certain actions (required)
               humanReadableName: This Action returns a double
               equationIdentifier: a #each action can define a optional plugin with which it can be referenced in an equation instruction
+              unit: Ampere
             - plugin: test-plugin  # the name of the corresponding plugin in labor-api (required)
               action: "null"
               humanReadableName: 'This Action returns null'

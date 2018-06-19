@@ -1,16 +1,9 @@
-name: Fancy Test Protocol
+name: Fancy Test Protocol v2
 description: This is a test protocol with pictures
 imageBasePath: fancy/
 instructions: 
     - Step 1:
         description: Always wear gloves!
-        actions:
-            - plugin: photometer
-              action: measure #each plugin supports certain actions (required)
-              humanReadableName: Measure Intensity # this will be shown the user when the action gets executed
-              equationIdentifier: a #each action can define a optional identifier with which it can be referenced in an equation instruction
-              wavelength: 420 # this will be passed to the plugin as well as anything which is defined here
-              current: 1 # use this to pass arguments to the plugin
         results:
             - add a description for a result here: Step 2 #for singular result (i.e. instructions that directly to another instruction) these will probably not be displayed by the client
     - Step 2:
