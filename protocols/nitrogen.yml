@@ -1,0 +1,253 @@
+name: Determination of free amino nitrogen in beer (EBC)
+description: This method implies to determine the free amino nitrogen (FAN) in beer, which includes amino acids, ammonia and end group amino nitrogens. The free amino nitrogen content (FAN) of a finished beer reflects primarily the utilization of wort free amino nitrogen during fermentation. Typical values for the FAN in beer lie between 10 and 120 mg/L. The detection and quantification of alpha-amino acids can be accomplished by the ninhydrin reaction. Ninhydrin is an oxidizing agent, which causes the oxidative decarboxylation of amino acids that results in an elimination of  CO2, NH3 and a formation of an aldehyde which is one carbon atom shorter than the initial amino acid. Reduced and unreduced ninhydrin reacts with free NH3 to a blue or yellow dye (in a reaction with proline). Fructose acts as an reducing agent within the reaction. Potassium iodate within the dilution solution acts keeps the ninhydrin oxidized and prevents undesired secondary reactions. The sample solutions get heated and the resulting dye can be measured at 570 nm.
+imageBasePath: nitrogen/ # a path relative to the global image base path defined via config.yml. This path will be appended before any generated or explictly set imagePath s.
+instructions: #we will refer to instruction as steps and vice versa for the length of the example
+    - Step 1 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Determination of Free Amino Nitrogen (FAN). Say \"next step\" to advance to the next work instruction and \"previous step\" to go to the previously shown work instruction!"
+        results: # results are what happens when you finished this step/instruction.
+            - add a description for a result here: Step 2
+    - Step 2 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Put on Gloves!
+        results:
+            - add a description for a result here: Step 3
+    - Step 3 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Turn on two waterbaths and set their temperatures to 100 °C and 20 °C
+        results:
+            - add a description for a result here: Step 4
+    - Step 4 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 5 mL of beer into a 50 mL Falcon Tube
+        results:
+            - add a description for a result here: Step 5
+    - Step 5 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Shake and open the Falcon Tube 3 times to decarbonate the sample
+        results:
+            - add a description for a result here: Step 6
+    - Step 6 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 20 ml of purified water into a new Falcon Tube
+        results:
+            - add a description for a result here: Step 7
+    - Step 7 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Add 500 µL of beer sample
+        results:
+            - add a description for a result here: Step 8
+    - Step 8 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Use purified water to fill Falcon tube up to 25 mL
+        results:
+            - add a description for a result here: Step 9
+    - Step 9 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Mix diluted beer sample using the Vortexer
+        results:
+            - add a description for a result here: Step 10
+    - Step 10 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 2 ml of diluted beer samples into 3 different test tubes
+        results:
+            - add a description for a result here: Step 11
+    - Step 11 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 2 ml of standard solution into 3 different test tubes
+        results:
+            - add a description for a result here: Step 12
+    - Step 12 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 2 ml of purified water into 3 different test tubes
+        results:
+            - add a description for a result here: Step 13
+    - Step 13 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 1000 µl of Color Reagent into the previously prepared test tubes
+        results:
+            - add a description for a result here: Step 14
+    - Step 14 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Mix test tubes thoroughly using the Vortexer
+        results:
+            - add a description for a result here: Step 15
+    - Step 15 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Put test tubes into a heat resistent tube rack and close them loosely
+        results:
+            - add a description for a result here: Step 16
+    - Step 16 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Put test tubes into a waterbath and heat the samples up for 16 min at 100 °C. Say \"next step\" to start a timer!"
+        results:
+            - add a description for a result here: Step 17
+    - Step 17 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Wait for the samples to heat up. 
+        timerDuration: 960 # this step will show the user a timer which runs for 16 minutes
+        results:
+            - add a description for a result here: Step 18
+    - Step 18 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Put test tubes into a waterbath and cool the samples down for 20 min at 20 °C. Say \"next step\" to start a timer!"
+        results:
+            - add a description for a result here: Step 19
+    - Step 19 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Wait for the samples to cool. 
+        timerDuration: 1200 # this step will show the user a timer which runs for 20 minutes
+        results:
+            - add a description for a result here: Step 20
+    - Step 20 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Take samples out of the waterbath and add 5 ml of dilution solution to every test tube
+        results:
+            - add a description for a result here: Step 21
+    - Step 21 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Mix test tubes thoroughly using the Vortexer
+        results:
+            - add a description for a result here: Step 22
+    - Step 22 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Place cuvette with purified water into photometer and blank at 570 nm. Say \"next\" to blank the photometer"
+        results:
+            - add a description for a result here: Step 23
+    - Step 23 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Photometer Setup successful!
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: setWavelength #each plugin supports certain actions (required)
+              humanReadableName: Setting wavelength to 570 nm
+              wavelength: 570 # this will be passed to the plugin as well as anything which is defined here
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: zero #each plugin supports certain actions (required)
+              humanReadableName: Blanking photometer
+        results:
+            - add a description for a result here: Step 24
+    - Step 24 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 1000 µL of every beer sample test tube into a new cuvette
+        results:
+            - add a description for a result here: Step 25
+    - Step 25 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Place cuvette with 1st beer sample into photometer and measure at 570 nm. Say \"next step\" to measure"
+        results:
+            - add a description for a result here: Step 26
+    - Step 26 : # this is the instruction identifier which is later used for target this instruction with a result
+        description:  rel. Absorbance Units of 1st beer sample
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              humanReadableName: Measurement of 1st beer sample at 570 nm
+              equationIdentifier: a #each action can define a optional identifier with which it can be referenced in an equation instruction
+              unit: rel. abs.
+        results:
+            - add a description for a result here: Step 27
+    - Step 27 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Remove previously used cuvette and place cuvette with 2nd beer sample into photometer and measure at 570 nm. Say \"next step\" to measure."
+        results:
+            - add a description for a result here: Step 28
+    - Step 28:
+        description:  rel. Absorbance Units of 2nd beer sample
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              humanReadableName: Measurement of 2nd beer sample at 570 nm
+              equationIdentifier: b #each action can define a optional identifier with which it can be referenced in an equation instruction
+              unit: rel. abs.
+        results:
+            - add a description for a result here: Step 29
+    - Step 29 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Remove previously used cuvette and place cuvette with 3rd beer sample into photometer and measure at 570 nm. Say \"next step\" to measure."
+        results:
+            - add a description for a result here: Step 30
+    - Step 30:
+        description:  rel. Absorbance Units of 3rd beer sample
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              humanReadableName: Measurement of 3rd beer sample at 570 nm
+              equationIdentifier: c #each action can define a optional identifier with which it can be referenced in an equation instruction
+              unit: rel. abs.
+        results:
+            - add a description for a result here: Step 31
+    - Step 31 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 1000 µL of every standard test tube into a new cuvette
+        results:
+            - add a description for a result here: Step 32
+    - Step 32 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Remove previously used cuvette and place cuvette with 1st standard sample into photometer and measure at 570 nm. Say \"next step\" to measure!"
+        results:
+            - add a description for a result here: Step 33
+    - Step 33:
+        description:  rel. Absorbance Units of 1st standard sample
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              humanReadableName: Measurement of 1st standard sample at 570 nm
+              equationIdentifier: d #each action can define a optional identifier with which it can be referenced in an equation instruction
+              unit: rel. abs.
+        results:
+            - add a description for a result here: Step 34
+    - Step 34 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Remove previously used cuvette and place cuvette with 2nd standard sample into photometer and measure at 570 nm. Say \"next step\" to measure."
+        results:
+            - add a description for a result here: Step 35
+    - Step 35:
+        description:  rel. Absorbance Units of 2nd standard sample
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              humanReadableName: Measurement of 2nd standard sample at 570 nm
+              equationIdentifier: e #each action can define a optional identifier with which it can be referenced in an equation instruction
+              unit: rel. abs.
+        results:
+            - add a description for a result here: Step 36
+    - Step 36 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Remove previously used cuvette and place cuvette with 3rd standard sample into photometer and measure at 570 nm. Say \"next step\" to measure."
+        results:
+            - add a description for a result here: Step 37
+    - Step 37:
+        description:  rel. Absorbance Units of 3rd standard sample
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              humanReadableName: Measurement of 3rd standard sample at 570 nm
+              equationIdentifier: f #each action can define a optional identifier with which it can be referenced in an equation instruction
+              unit: rel. abs.
+        results:
+            - add a description for a result here: Step 38
+    - Step 38 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 1000 µL of every blank sample test tube into a new cuvette
+        results:
+            - add a description for a result here: Step 39
+    - Step 39 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Remove the previously used cuvette and place the cuvette with 1st blind sample into photometer and measure at 570 nm. Say \"next step\" to measure"
+        results:
+            - add a description for a result here: Step 40
+    - Step 40:
+        description:  rel. Absorbance Units of 1st blind sample
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              humanReadableName: Measurement of 1st blind sample at 570 nm
+              equationIdentifier: g #each action can define a optional identifier with which it can be referenced in an equation instruction
+              unit: rel. abs.
+        results:
+            - add a description for a result here: Step 41
+    - Step 41 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Remove the previously used cuvette and place the cuvette with 2nd blind sample into photometer and measure at 570 nm. Say \"next step\" to measure!"
+        results:
+            - add a description for a result here: Step 42
+    - Step 42:
+        description:  rel. Absorbance Units of 2nd blind sample
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              humanReadableName: Measurement of 2nd blind sample at 570 nm
+              equationIdentifier: h #each action can define a optional identifier with which it can be referenced in an equation instruction
+              unit: rel. abs.
+        results:
+            - add a description for a result here: Step 43
+    - Step 43 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Remove the previously used cuvette and place the cuvette with 3rd blind sample into photometer and measure at 570 nm. Say \"next step\" to measure!"
+        results:
+            - add a description for a result here: Step 44
+    - Step 44:
+        description:  rel. Absorbance Units of 3rd blind sample
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              humanReadableName: Measurement of 3rd blind sample at 570 nm
+              equationIdentifier: i #each action can define a optional identifier with which it can be referenced in an equation instruction
+              unit: rel. abs.
+        results:
+            - add a description for a result here: Step 45
+    - Step 45 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: The FAN of the analyzed sample is FAN [mg/l] 
+        equation: ((((a+b+c)/3)-((g+h+i)/3))/(((d+e+f)/3)-((g+h+i)/3)))*2*50
+        results:
+            - add a description for a result here: Step 46
+    - Step 46 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Remove previously used cuvette. Dispose FAN reagents into FAN waste containment. The experiment has finished! Say \"end protocol\" to exit the SOP!"
+        results:
+            - experiment is finished: null # if you specify null as the next instruction, the labor-api-cli will know that this is your last instruction.

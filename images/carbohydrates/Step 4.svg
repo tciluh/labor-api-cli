@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generiert durch Microsoft Visio, SVG Export 4.svg Page-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="5.20768in" height="2.44414in"
+		viewBox="0 0 374.953 175.978" xml:space="preserve" color-interpolation-filters="sRGB" class="st7">
+	<v:documentProperties v:langID="1031" v:metric="true" v:viewMarkup="false">
+		<v:userDefs>
+			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(0):26"/>
+			<v:ud v:nameU="msvConvertTheme"/>
+		</v:userDefs>
+	</v:documentProperties>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:#000000;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:url(#grad0-7);stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.25}
+		.st3 {visibility:visible}
+		.st4 {fill:#cdcdcd;fill-opacity:0.5;stroke:#cdcdcd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.5}
+		.st5 {fill:url(#grad0-13);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.25}
+		.st6 {fill:url(#grad0-19);stroke:#404040;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.25}
+		.st7 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<defs id="Patterns_And_Gradients">
+		<linearGradient id="grad0-7" x1="0" y1="0" x2="1" y2="0" gradientTransform="rotate(270 0.5 0.5)">
+			<stop offset="0" stop-color="#adc9e0" stop-opacity="1"/>
+			<stop offset="1" stop-color="#c3d7e8" stop-opacity="1"/>
+		</linearGradient>
+		<linearGradient id="grad0-13" x1="0" y1="0" x2="1" y2="0" gradientTransform="rotate(270 0.5 0.5)">
+			<stop offset="0" stop-color="#f0f0f0" stop-opacity="1"/>
+			<stop offset="1" stop-color="#ffffff" stop-opacity="1"/>
+		</linearGradient>
+		<linearGradient id="grad0-19" x1="0" y1="0" x2="1" y2="0" gradientTransform="rotate(270 0.5 0.5)">
+			<stop offset="0" stop-color="#000000" stop-opacity="1"/>
+			<stop offset="1" stop-color="#000000" stop-opacity="1"/>
+		</linearGradient>
+	</defs>
+	<g v:mID="4" v:index="1" v:groupContext="backgroundPage">
+		<v:userDefs>
+			<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+			<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+			<v:ud v:nameU="msvThemeOrder" v:val="VT0(0):26"/>
+			<v:ud v:nameU="msvVisioCreated" v:prompt="" v:val="VT0(0):26"/>
+		</v:userDefs>
+		<title>VHintergrund-1</title>
+		<v:pageProperties width="5.20768" height="2.44414" v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24"
+				v:shadowOffsetX="8.50394" v:shadowOffsetY="-8.50394"/>
+		<g id="shape1-1" v:mID="1" v:groupContext="shape">
+			<title>Vollton</title>
+			<v:userDefs>
+				<v:ud v:nameU="Background" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(DoNotContain)"/>
+				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+				<v:ud v:nameU="msvVisioCreated" v:prompt="" v:val="VT0(0):26"/>
+			</v:userDefs>
+			<rect x="0" y="0" width="374.953" height="175.978" class="st1"/>
+		</g>
+	</g>
+	<g v:mID="0" v:index="2" v:groupContext="foregroundPage">
+		<v:userDefs>
+			<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+			<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+			<v:ud v:nameU="msvThemeOrder" v:val="VT0(0):26"/>
+		</v:userDefs>
+		<title>Zeichenblatt-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Flussdiagramm" v:index="0"/>
+		<v:layer v:name="Verbinder" v:index="1"/>
+		<g id="group26-3" transform="translate(147.49,-92.4202)" v:mID="26" v:groupContext="group">
+			<v:userDefs>
+				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+				<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+			</v:userDefs>
+			<title>Tabelle.26</title>
+			<g id="shape27-4" v:mID="27" v:groupContext="shape" transform="translate(7.21216,-23.6934)">
+				<title>Tabelle.27</title>
+				<v:userDefs>
+					<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+					<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+				</v:userDefs>
+				<path d="M0 167.41 L0 173.29 A3.49311 2.68701 -180 0 0 6.99 173.29 L6.99 167.41 L0 167.41 Z" class="st2"/>
+			</g>
+			<g id="shape28-8" v:mID="28" v:groupContext="shape">
+				<title>Tabelle.28</title>
+				<v:userDefs>
+					<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+					<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+				</v:userDefs>
+				<g id="shadow28-9" v:groupContext="shadow" v:shadowOffsetX="1.44" v:shadowOffsetY="-1.44" v:shadowType="1"
+						transform="matrix(1,0,0,1,1.44,1.44)" class="st3">
+					<path d="M0 124.13 L0 171.26 A4.7139 4.7139 -180 0 0 4.71 175.98 L74.48 175.98 A4.7139 4.7139 -180 0 0 79.19
+								 171.26 L79.19 124.13 L0 124.13 Z" class="st4"/>
+				</g>
+				<path d="M0 124.13 L0 171.26 A4.7139 4.7139 -180 0 0 4.71 175.98 L74.48 175.98 A4.7139 4.7139 -180 0 0 79.19 171.26
+							 L79.19 124.13 L0 124.13 Z" class="st5"/>
+			</g>
+			<g id="shape29-14" v:mID="29" v:groupContext="shape" transform="translate(20.9271,-5.69605)">
+				<title>Tabelle.29</title>
+				<v:userDefs>
+					<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+					<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+				</v:userDefs>
+				<g id="shadow29-15" v:groupContext="shadow" v:shadowOffsetX="1.44" v:shadowOffsetY="-1.44" v:shadowType="1"
+						transform="matrix(1,0,0,1,1.44,1.44)" class="st3">
+					<path d="M16.36 159.73 L16.36 167.16 L11.04 170.23 L13.34 174.21 L16.36 172.46 L16.36 175.98 L20.96 175.98 L20.96
+								 172.46 L24 174.21 L26.3 170.23 L20.96 167.15 L20.96 159.73 L27.26 163.36 L27.26 169.31 L31.86 169.31
+								 L31.86 166.02 L35.04 167.85 L37.34 163.87 L33.98 161.93 L37.19 160.08 L34.89 156.09 L29.38 159.28
+								 L23.27 155.75 L29.78 151.99 L34.89 154.94 L37.19 150.96 L34.38 149.33 L37.34 147.62 L35.04 143.64
+								 L31.86 145.48 L31.86 141.72 L27.26 141.72 L27.26 148.13 L20.96 151.77 L20.96 143.89 L26.3 140.8
+								 L24 136.82 L20.96 138.58 L20.96 135.52 L16.36 135.52 L16.36 138.57 L13.34 136.82 L11.04 140.8 L16.36
+								 143.88 L16.36 151.76 L10.39 148.31 L10.39 141.72 L5.79 141.72 L5.79 145.66 L2.3 143.64 L0 147.62
+								 L3.12 149.42 L0.46 150.96 L2.76 154.94 L7.72 152.08 L14.07 155.75 L7.91 159.31 L2.34 156.09 L0.04
+								 160.08 L3.31 161.96 L0 163.87 L2.3 167.85 L5.37 166.08 L5.37 169.31 L9.97 169.31 L9.97 163.42 L16.36
+								 159.73 Z" class="st4"/>
+				</g>
+				<path d="M16.36 159.73 L16.36 167.16 L11.04 170.23 L13.34 174.21 L16.36 172.46 L16.36 175.98 L20.96 175.98 L20.96
+							 172.46 L24 174.21 L26.3 170.23 L20.96 167.15 L20.96 159.73 L27.26 163.36 L27.26 169.31 L31.86 169.31
+							 L31.86 166.02 L35.04 167.85 L37.34 163.87 L33.98 161.93 L37.19 160.08 L34.89 156.09 L29.38 159.28 L23.27
+							 155.75 L29.78 151.99 L34.89 154.94 L37.19 150.96 L34.38 149.33 L37.34 147.62 L35.04 143.64 L31.86 145.48
+							 L31.86 141.72 L27.26 141.72 L27.26 148.13 L20.96 151.77 L20.96 143.89 L26.3 140.8 L24 136.82 L20.96
+							 138.58 L20.96 135.52 L16.36 135.52 L16.36 138.57 L13.34 136.82 L11.04 140.8 L16.36 143.88 L16.36 151.76
+							 L10.39 148.31 L10.39 141.72 L5.79 141.72 L5.79 145.66 L2.3 143.64 L0 147.62 L3.12 149.42 L0.46 150.96
+							 L2.76 154.94 L7.72 152.08 L14.07 155.75 L7.91 159.31 L2.34 156.09 L0.04 160.08 L3.31 161.96 L0 163.87
+							 L2.3 167.85 L5.37 166.08 L5.37 169.31 L9.97 169.31 L9.97 163.42 L16.36 159.73 Z" class="st6"/>
+			</g>
+		</g>
+	</g>
+</svg>

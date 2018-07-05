@@ -1,0 +1,85 @@
+name: Beer color determination
+description: This method implies to eliminate subjective influences of the human eye as well as differences in the color impression with the comparison of beer samples with a color card (MEBAK  2.12.1). The extinction of a diluted beer sample is measured in a 10-mm-cuvette at a wavelength of 430 nm. Melanoides and Melanoidines that are formed in the brewing process absorb at 430 nm. The color in EBC units can be calculated by using an appropriate factor. 
+imageBasePath: beercolor/ # a path relative to the global image base path defined via config.yml. This path will be appended before any generated or explictly set imagePath s.
+instructions: #we will refer to instruction as steps and vice versa for the length of the example
+    - Step 1 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Beer color determination.\n Say “next step” to advance to the next work instruction and „previous step“ to go to the previously shown work instruction!"
+        results:
+            - add a description for a result here: Step 2
+    - Step 2 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Put on Gloves!
+        results:
+            - add a description for a result here: Step 3
+    - Step 3 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Decant 25 mL of beer into a 50 mL Falcon tube
+        results:
+            - add a description for a result here: Step 4
+    - Step 4 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Draw up 10 ml of beer sample with a syringe
+        results:
+            - add a description for a result here: Step 5
+    - Step 5 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Apply a 0.45 µm syringe filter
+        results:
+            - add a description for a result here: Step 6
+    - Step 6 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Filter beer sample into a 50 mL Falcon tube
+        results:
+            - add a description for a result here: Step 7
+    - Step 7 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: 750 µL of purified water into a new cuvette
+        results:
+            - add a description for a result here: Step 8
+    - Step 8 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 500 µL of filtered beer sample into previously prepared cuvette and mix the sample up
+        results:
+            - add a description for a result here: Step 9
+    - Step 9 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Pipette 1000 µL of purified water into a new cuvette
+        results:
+            - add a description for a result here: Step 10
+    - Step 10 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Place cuvette with purified water into photometer. Say „next step“ to blank the photometer!
+        results:
+            - add a description for a result here: Step 11
+    - Step 11 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Blanking successful!
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer
+              action: setWavelength
+              wavelength: 430
+              humanReadableName: Setting Wavelength to 430NM
+              unit: null
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: zero #each plugin supports certain actions (required)
+              humanReadableName: Blanking photometer
+              unit: null
+        results:
+            - add a description for a result here: Step 12
+    - Step 12 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Remove previously inserted cuvette and place cuvette with beer sample into photometer
+        results:
+            - add a description for a result here: Step 13
+    - Step 13 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Say „next step“ to measure!
+        results:
+            - add a description for a result here: Step 14
+    - Step 14 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: Measuring Value 
+        actions: # actions describe anything that happens with an external device
+            - plugin: photometer # the name of the corresponding plugin in labor-api (required)
+              action: measure #each plugin supports certain actions (required)
+              humanReadableName: Measurement at 430 nm
+              equationIdentifier: a
+              unit: rel. absorbance 
+        results:
+            - add a description for a result here: Step 15
+    - Step 15 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "The color of your beer sample is: \n\nColor [EBC Units]"
+        equation: a*25*4
+        results:
+            - add a description for a result here: Step 16
+    - Step 16 : # this is the instruction identifier which is later used for target this instruction with a result
+        description: "Dispose all samples. \n The experiment has finished!\n Say \"end protocol\" to exit the SOP!"
+        results:
+            - experiment is finished: null # if you specify null as the next instruction, the labor-api-cli will know that this is your last instruction.
