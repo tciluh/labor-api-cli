@@ -27,7 +27,7 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
         results:
             - add a description for a result here: Step 7
     - Step 7 : # this is the instruction identifier which is later used for target this instruction with a result
-        description: 750 µL of purified water into a new cuvette
+        description: Pipette 750 µL of purified water into a new cuvette
         results:
             - add a description for a result here: Step 8
     - Step 8 : # this is the instruction identifier which is later used for target this instruction with a result
