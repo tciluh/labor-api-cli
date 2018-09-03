@@ -31,7 +31,7 @@ instructions: #we will refer to instruction as steps and vice versa for the leng
         results:
             - add a description for a result here: Step 8
     - Step 8 : # this is the instruction identifier which is later used for target this instruction with a result
-        description: Pipette 500 µL of filtered beer sample into previously prepared cuvette and mix the sample up
+        description: Pipette 250 µL of filtered beer sample into previously prepared cuvette and mix the sample up
         results:
             - add a description for a result here: Step 9
     - Step 9 : # this is the instruction identifier which is later used for target this instruction with a result
